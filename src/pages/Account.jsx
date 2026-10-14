@@ -200,11 +200,11 @@ function Subscription({ acc, onSaved }) {
       <div className="card stack">
         <div className="between"><h2 className="h-3">{s.plan}</h2><span className={`chip ${s.status === 'expiring' ? 'chip-accent' : 'on'}`}>{s.status}</span></div>
         <div className="sum-row" style={{ borderColor: 'var(--line)' }}><span className="dim">Seats</span><span>{s.seats}</span></div>
-        <div className="sum-row" style={{ borderColor: 'var(--line)' }}><span className="dim">Price</span><span>{eur(s.price)} / seat / year excl. VAT</span></div>
+        <div className="sum-row" style={{ borderColor: 'var(--line)' }}><span className="dim">Price</span><span>{eur(s.price)} / year for {s.seats} seats excl. VAT</span></div>
         <div className="sum-row" style={{ borderColor: 'var(--line)' }}><span className="dim">{s.status === 'active' ? 'Renews on' : 'Ends on'}</span><span>{s.renewsAt}</span></div>
         {s.status === 'expiring' ? (
           <button className="btn-mega" onClick={renew} disabled={busy} style={{ alignSelf: 'flex-start' }}>
-            {busy ? 'Renewing…' : `Renew for ${eur(s.price * s.seats * 1.21)}`}<span className="arrow">{busy ? <Spinner /> : '↻'}</span>
+            {busy ? 'Renewing…' : `Renew for ${eur(s.price * 1.21)}`}<span className="arrow">{busy ? <Spinner /> : '↻'}</span>
           </button>
         ) : (
           <div className="notice ink">Renewed. Your new invoice is under Invoices and in your inbox.</div>

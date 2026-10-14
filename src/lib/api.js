@@ -1,14 +1,38 @@
-// Single integration layer between the site and n8n.
-// Every exported call below is one n8n webhook. While VITE_N8N_BASE_URL is empty the site
-// runs on mock data, so the frontend can be built and demoed before any workflow exists.
+// Single integration layer between the site and the backend.
+// - Real now: catalog, products, search, VAT check -> LoopCasts API (/api, server/index.js)
+// - Still mocked: orders, login, account, support, newsletter -> n8n webhooks / API in the next steps.
+//   While VITE_N8N_BASE_URL is empty those run on mock data.
 import { makeOGM } from './ogm.js';
 import { vatRule } from './vat.js';
-import { PLANS, PROMOS } from '../data/catalog.js';
+import { PROMOS } from '../data/catalog.js';
 import { MOCK_ACCOUNT } from '../data/account.js';
+
+const API = import.meta.env.VITE_API_URL || '';
+
+export async function api(path, { method = 'GET', body } = {}) {
+  const res = await fetch(API + path, {
+    method,
+    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    credentials: 'include',
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || `Request failed (${res.status})`);
+  return data;
+}
+
+// ---------- catalog (real data from Postgres) ----------
+export const getProducts = () => api('/api/products');
+export const getCourses = (params = {}) => api('/api/courses?' + new URLSearchParams(params));
+export const getCourse = (slug) => api(`/api/courses/${encodeURIComponent(slug)}`);
+export const searchVideos = (q) => api('/api/search?' + new URLSearchParams({ q }));
+
+// ---------- VAT: real VIES check through the API ----------
+export const checkVat = (vat) => api('/api/vat/check', { method: 'POST', body: { vat } });
 
 const env = import.meta.env;
 const BASE = env.VITE_N8N_BASE_URL || '';
-export const MOCK = !BASE;
+export const MOCK = !BASE; // n8n not connected yet
 
 // Name → path. Rendered in the UI by <Hook> so it is visible where n8n plugs in.
 export const WEBHOOKS = {
@@ -63,31 +87,20 @@ function nextInvoiceNo(s) {
 }
 
 // ---------- Order → Invoice → Payment → Access ----------
-export const checkVat = (vat) =>
-  call('vatCheck', { vat }, ({ vat }) => {
-    const v = String(vat || '').replace(/[\s.]/g, '').toUpperCase();
-    if (v.startsWith('XX')) return { status: 'unavailable', vat: v, message: 'VIES did not answer. We keep the order as "VAT not checked" and our team verifies it.' };
-    const ok = /^[A-Z]{2}[0-9A-Z]{8,12}$/.test(v) && !v.endsWith('000');
-    return ok
-      ? { status: 'valid', vat: v, name: v.startsWith('BE') ? 'Vermeulen BV' : 'Example Trading GmbH' }
-      : { status: 'invalid', vat: v, message: 'VIES says this number is not valid.' };
-  });
-
 export const checkPromo = (code, planId) =>
   call('promoCheck', { code, planId }, ({ code }) => {
     const p = PROMOS[String(code || '').trim().toUpperCase()];
     return p ? { valid: true, ...p } : { valid: false, message: 'Unknown or expired code.' };
   });
 
-export function priceOrder({ planId, seats, promo, country, isCompany, vatStatus }) {
-  const plan = PLANS.find((p) => p.id === planId);
-  const n = plan.perSeat ? Math.max(plan.minSeats, Number(seats) || plan.minSeats) : 1;
-  const gross = plan.price * n;
+// Live price preview. n8n recalculates on the server; the browser is never trusted for money.
+export function priceOrder({ plan, promo, country, isCompany, vatStatus }) {
+  const gross = plan.price_excl;
   const discount = promo?.valid ? Math.round(gross * promo.percent) / 100 : 0;
   const net = +(gross - discount).toFixed(2);
   const rule = vatRule({ country, isCompany, vatValid: vatStatus === 'valid' });
   const vat = +(net * rule.rate).toFixed(2);
-  return { plan, seats: n, gross, discount, net, vat, total: +(net + vat).toFixed(2), vatLabel: rule.label };
+  return { plan, seats: plan.seats, gross, discount, net, vat, total: +(net + vat).toFixed(2), vatLabel: rule.label };
 }
 
 export const createOrder = (order) =>
@@ -100,7 +113,7 @@ export const createOrder = (order) =>
       id, invoiceNo,
       ogm: makeOGM(invoiceNo.replace('-', '')),
       status: 'payment_pending',
-      plan: p.plan.name, planId: p.plan.id, seats: p.seats,
+      plan: p.plan.name + (o.course ? `: ${o.course.title}` : ''), planId: p.plan.code, seats: p.seats,
       gross: p.gross, discount: p.discount, net: p.net, vat: p.vat, total: p.total, vatLabel: p.vatLabel,
       vatChecked: o.vatStatus !== 'unavailable',
       email: o.email, name: o.name, company: o.company, po: o.po,

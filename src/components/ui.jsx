@@ -2,10 +2,11 @@ import { WEBHOOKS } from '../lib/api.js';
 
 // Visible marker for every place where an n8n webhook plugs in.
 // Hide all markers with the toggle in the bottom-left demo bar.
-export function Hook({ name, note }) {
+// kind="api" marks calls that already go to the real LoopCasts API.
+export function Hook({ name, note, kind = 'n8n', path }) {
   return (
-    <span className="hook" title={note || 'n8n webhook'}>
-      <b>n8n</b> POST {WEBHOOKS[name] || name}{note ? ` · ${note}` : ''}
+    <span className="hook" title={note || (kind === 'api' ? 'LoopCasts API (live)' : 'n8n webhook (mock for now)')}>
+      <b>{kind === 'api' ? 'API · live' : 'n8n'}</b> POST {path || WEBHOOKS[name] || name}{note ? ` · ${note}` : ''}
     </span>
   );
 }

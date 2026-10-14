@@ -1,44 +1,44 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { useMemo, useState } from 'react';
-import { PageHead } from '../components/ui.jsx';
-import { fmtTime, searchTranscripts } from '../data/catalog.js';
-
-function highlight(text, q) {
-  const i = text.toLowerCase().indexOf(q.toLowerCase());
-  if (i < 0 || !q) return text;
-  return <>{text.slice(0, i)}<mark>{text.slice(i, i + q.length)}</mark>{text.slice(i + q.length)}</>;
-}
+import { useState } from 'react';
+import { PageHead, Spinner } from '../components/ui.jsx';
+import { fmtTime, lessonLabel } from '../data/catalog.js';
+import { searchVideos } from '../lib/api.js';
+import { useApi } from '../lib/useApi.js';
 
 export default function Search() {
   const [params, setParams] = useSearchParams();
-  const [q, setQ] = useState(params.get('q') || '');
   const active = params.get('q') || '';
-  const hits = useMemo(() => searchTranscripts(active), [active]);
+  const [q, setQ] = useState(active);
+  const { data: hits, loading } = useApi(() => (active ? searchVideos(active) : Promise.resolve([])), [active]);
 
   return (
     <div className="page">
       <div className="wrap" style={{ maxWidth: 980 }}>
-        <PageHead label="Search in video transcripts" title={<>Find the <span className="serif">exact second.</span></>} />
+        <PageHead label="Search in all videos" title={<>Find the <span className="serif">right lesson.</span></>} />
         <form className="search-big" onSubmit={(e) => { e.preventDefault(); setParams(q ? { q } : {}); }}>
-          <input autoFocus placeholder="password, VAT, webhook, subtitles…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search" />
+          <input autoFocus placeholder="webhook, docker, invoices, RAG…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search" />
           <button className="btn btn-ink">Search</button>
         </form>
-        <p className="hint" style={{ marginTop: 12 }}>Mock: searches the sample transcripts in the browser. Production: full-text index over Whisper transcripts of all videos.</p>
+        <p className="hint" style={{ marginTop: 12 }}>
+          Postgres full-text search over all 599 videos. Today it searches course and video titles; once transcripts exist it searches every spoken word with the same query.
+        </p>
 
         <div style={{ marginTop: 40 }}>
-          {active && <div className="label" style={{ marginBottom: 16 }}>{hits.length} result{hits.length === 1 ? '' : 's'} for “{active}”</div>}
-          {hits.map((h, i) => (
-            <Link key={i} to={`/courses/${h.course.slug}/${h.lesson.slug}?t=${h.line.start}`} className="card card-hover" style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: 18, textDecoration: 'none', marginBottom: 12, padding: 22 }}>
-              <span className="chip chip-accent" style={{ justifyContent: 'center' }}>{fmtTime(h.line.start)}</span>
+          {loading && active && <Spinner />}
+          {!loading && active && <div className="label" style={{ marginBottom: 16 }}>{hits.length} result{hits.length === 1 ? '' : 's'} for “{active}”</div>}
+          {!loading && hits?.map((h) => (
+            <Link key={`${h.course_slug}-${h.position}`} to={`/courses/${h.course_slug}/${h.position}`} className="card card-hover"
+              style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: 18, textDecoration: 'none', marginBottom: 12, padding: 22 }}>
+              <span className="chip chip-accent" style={{ justifyContent: 'center' }}>{fmtTime(h.duration_s)}</span>
               <span className="stack" style={{ gap: 4 }}>
-                <span style={{ fontSize: 18 }}>“{highlight(h.line.text, active)}”</span>
-                <span className="label">{h.course.title} · {h.lesson.title}</span>
+                <span style={{ fontSize: 18 }}>{h.course_title} · {lessonLabel(h)}</span>
+                {h.snippet && <span className="dim" dangerouslySetInnerHTML={{ __html: h.snippet.replace(/<(?!\/?b>)/g, '&lt;') }} />}
               </span>
             </Link>
           ))}
-          {active && hits.length === 0 && (
+          {!loading && active && hits?.length === 0 && (
             <div className="notice">
-              <span>Nothing found. Did you mean a course idea? <Link to="/support?topic=idea" className="link">Suggest a course</Link></span>
+              <span>Nothing found. Is this a course you would like? <Link to="/support?topic=idea" className="link">Suggest a course</Link></span>
             </div>
           )}
         </div>

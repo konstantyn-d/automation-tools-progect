@@ -1,8 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Arrow, BlobField, MorphBlob, Reveal } from '../components/Blobs.jsx';
-import CourseCard from '../components/CourseCard.jsx';
-import { COURSES } from '../data/catalog.js';
+import CourseCard, { Skeleton } from '../components/CourseCard.jsx';
+import { getCourses } from '../lib/api.js';
+import { useApi } from '../lib/useApi.js';
 
 const HERO_BLOBS = [
   { x: '52%', y: '6%', size: 420, duration: 16, dx1: -80, dy1: 60, dx2: 40, dy2: -30 },
@@ -22,6 +23,7 @@ const STEPS = [
 export default function Home() {
   const [q, setQ] = useState('');
   const nav = useNavigate();
+  const { data: popular } = useApi(() => getCourses({ sort: 'popular' }), []);
   return (
     <>
       <section className="hero">
@@ -29,7 +31,7 @@ export default function Home() {
         <div className="hero-content">
           <div className="hero-meta label" style={{ color: '#fff' }}>
             <span>Video courses · Gent, BE</span>
-            <span>40+ courses · EN / NL subtitles</span>
+            <span>53 live courses · 7,278 minutes</span>
           </div>
           <h1 className="h-display">
             <span style={{ display: 'block' }}>Learn it.</span>
@@ -37,7 +39,7 @@ export default function Home() {
           </h1>
         </div>
         <div className="hero-foot">
-          <p>Practical video courses for small teams. Order in two minutes, get your invoice instantly, start the day you pay.</p>
+          <p>Practical automation courses for developers, data people and small agencies. Order in two minutes, get your invoice instantly, start the day you pay.</p>
           <Link to="/order" className="btn-mega">Start learning <span className="arrow"><Arrow /></span></Link>
           <div className="right">
             <Link to="/courses" className="link">Browse the catalog</Link>
@@ -49,7 +51,7 @@ export default function Home() {
         <div className="marquee-track">
           {Array.from({ length: 2 }).map((_, k) => (
             <span key={k} style={{ display: 'inline-flex', gap: 56 }}>
-              {['Power Query', 'Video editing', 'GDPR', 'n8n', 'Presenting', 'Bookkeeping'].map((w) => (
+              {['n8n', 'Webhooks', 'AI agents', 'Docker', 'RAG', 'GitHub Actions', 'Invoicing workflows'].map((w) => (
                 <span key={w}>{w} <span className="dot">●</span></span>
               ))}
             </span>
@@ -84,7 +86,7 @@ export default function Home() {
             <Link to="/courses" className="link">All courses</Link>
           </div>
           <div className="grid-3">
-            {COURSES.slice(0, 3).map((c, i) => <Reveal key={c.slug}><CourseCard course={c} i={i} /></Reveal>)}
+            {popular ? popular.slice(0, 3).map((c, i) => <CourseCard key={c.slug} course={c} i={i} />) : <Skeleton n={3} />}
           </div>
         </div>
       </section>
@@ -98,7 +100,7 @@ export default function Home() {
               <h2 className="h-1">“In which video was <span className="serif">that</span> again?”</h2>
               <p style={{ color: '#bdbdb8', maxWidth: 520 }}>Every lesson is transcribed. Search a word and jump to the exact second.</p>
               <form className="search-big" onSubmit={(e) => { e.preventDefault(); nav(`/search?q=${encodeURIComponent(q)}`); }} style={{ borderColor: '#fff' }}>
-                <input placeholder="Try “reverse charge” or “webhook”" value={q} onChange={(e) => setQ(e.target.value)} style={{ color: '#fff' }} aria-label="Search videos" />
+                <input placeholder="Try “webhook” or “docker”" value={q} onChange={(e) => setQ(e.target.value)} style={{ color: '#fff' }} aria-label="Search videos" />
                 <button className="btn btn-accent">Search</button>
               </form>
             </div>

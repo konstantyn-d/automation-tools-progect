@@ -1,24 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { BlobField, Play } from '../components/Blobs.jsx';
-import { COURSES, fmtTime } from '../data/catalog.js';
+import { Spinner } from '../components/ui.jsx';
+import { fmtTime, lessonLabel } from '../data/catalog.js';
+import { getCourse } from '../lib/api.js';
 import { useAuth } from '../lib/auth.jsx';
+import { useApi } from '../lib/useApi.js';
 import NotFound from './NotFound.jsx';
 
 export default function Lesson() {
   const { slug, lesson } = useParams();
-  const [params] = useSearchParams();
   const { user } = useAuth();
-  const c = COURSES.find((x) => x.slug === slug);
-  const l = c?.lessons.find((x) => x.slug === lesson);
-  const [t, setT] = useState(Number(params.get('t')) || 0);
-  const [cc, setCc] = useState('EN');
-
-  useEffect(() => { setT(Number(params.get('t')) || 0); }, [params, lesson]);
+  const { data: c, loading } = useApi(() => getCourse(slug), [slug]);
+  if (loading) return <div className="page"><div className="wrap"><Spinner /></div></div>;
+  const l = c?.lessons.find((x) => String(x.position) === lesson);
   if (!c || !l) return <NotFound />;
 
   const locked = !l.free && !user;
-  const current = [...l.transcript].reverse().find((x) => x.start <= t) || l.transcript[0];
+  const next = c.lessons.find((x) => x.position === l.position + 1);
 
   return (
     <div className="page">
@@ -41,43 +39,35 @@ export default function Lesson() {
                   </div>
                 </div>
               ) : (
-                <>
-                  <div className="stack" style={{ textAlign: 'center', position: 'relative' }}>
-                    <span style={{ width: 76, height: 76, borderRadius: '50%', background: 'var(--accent)', display: 'grid', placeItems: 'center', margin: '0 auto' }}><Play size={24} /></span>
-                    <span className="mono" style={{ color: '#888', fontSize: 12 }}>Vimeo player (private, embed only) · {fmtTime(t)}</span>
-                  </div>
-                  {cc !== 'Off' && <div className="cc">{current.text}</div>}
-                </>
+                <div className="stack" style={{ textAlign: 'center', position: 'relative' }}>
+                  <span style={{ width: 76, height: 76, borderRadius: '50%', background: 'var(--accent)', display: 'grid', placeItems: 'center', margin: '0 auto' }}><Play size={24} /></span>
+                  <span className="mono" style={{ color: '#888', fontSize: 12 }}>
+                    {l.vimeo_id ? `Vimeo video ${l.vimeo_id} · embed only on loopcasts domain` : 'Video unlocks with a real login (step 2)'} · {fmtTime(l.duration_s)}
+                  </span>
+                </div>
               )}
             </div>
             <div className="between">
-              <h1 className="h-2">{l.title}</h1>
-              <div className="toggle" role="group" aria-label="Subtitles">
-                {['EN', 'NL', 'Off'].map((x) => <button key={x} className={cc === x ? 'on' : ''} onClick={() => setCc(x)}>{x}</button>)}
-              </div>
+              <h1 className="h-2">{lessonLabel(l)}</h1>
+              {next && <Link to={`/courses/${c.slug}/${next.position}`} className="btn btn-ghost btn-sm">Next lesson</Link>}
             </div>
-            <p className="hint">Subtitles and chapters are generated from the transcript when the video is uploaded. NL subtitles are mocked with the EN text.</p>
+            <div className="row">
+              <span className="chip">{l.has_chapters ? 'Chapters' : 'No chapters yet'}</span>
+              <span className="chip">{l.has_captions ? 'Subtitles' : 'No subtitles yet'}</span>
+            </div>
           </div>
 
           <div className="card">
-            <div className="between" style={{ marginBottom: 12 }}>
-              <span className="label">Transcript</span>
-              <Link to={`/search?q=`} className="link">Search all videos</Link>
-            </div>
-            <div className="transcript">
-              {l.transcript.map((line) => (
-                <div key={line.start} className={`tline ${line === current ? 'on' : ''}`} onClick={() => !locked && setT(line.start)}>
-                  <span className="mono">{fmtTime(line.start)}</span>
-                  <span style={locked ? { filter: 'blur(4px)' } : undefined}>{line.text}</span>
-                </div>
-              ))}
-            </div>
+            <span className="label">Transcript</span>
+            <p className="hint" style={{ marginTop: 12 }}>
+              None of the 599 videos has a transcript or subtitles yet. The Whisper step (plan step 7) fills this panel and makes every word searchable.
+            </p>
             <hr className="divider" style={{ margin: '20px 0' }} />
-            <div className="label" style={{ marginBottom: 8 }}>More in this course</div>
-            <div className="lesson-list">
+            <div className="label" style={{ marginBottom: 8 }}>In this course</div>
+            <div className="lesson-list transcript">
               {c.lessons.map((x) => (
-                <Link key={x.slug} to={`/courses/${c.slug}/${x.slug}`} className={x.slug === l.slug ? 'active' : ''}>
-                  <span>{x.title}</span><span className="mono dim">{x.minutes}m</span>
+                <Link key={x.position} to={`/courses/${c.slug}/${x.position}`} className={x.position === l.position ? 'active' : ''}>
+                  <span>{lessonLabel(x)}{x.free && <span className="accent"> · free</span>}</span><span className="mono dim">{fmtTime(x.duration_s)}</span>
                 </Link>
               ))}
             </div>

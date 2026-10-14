@@ -2,19 +2,27 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Arrow } from '../components/Blobs.jsx';
 import { Field, Hook, PageHead, Spinner } from '../components/ui.jsx';
-import { PLANS } from '../data/catalog.js';
-import { checkPromo, checkVat, createOrder, priceOrder } from '../lib/api.js';
+import { withCopy } from '../data/catalog.js';
+import { checkPromo, checkVat, createOrder, getCourses, getProducts, priceOrder } from '../lib/api.js';
+import { useApi } from '../lib/useApi.js';
 import { COUNTRIES, EU, eur } from '../lib/vat.js';
 import { PlanCard } from './Pricing.jsx';
 
 const STEPS = ['Plan', 'Your details', 'Review'];
 
 export default function Order() {
+  const products = useApi(getProducts, []);
+  const courses = useApi(() => getCourses({ sort: 'new' }), []);
+  if (!products.data || !courses.data) return <div className="page"><div className="wrap"><Spinner /></div></div>;
+  return <OrderForm plans={withCopy(products.data)} courses={courses.data} />;
+}
+
+function OrderForm({ plans, courses }) {
   const [params] = useSearchParams();
   const nav = useNavigate();
   const [step, setStep] = useState(0);
-  const [planId, setPlanId] = useState(PLANS.some((p) => p.id === params.get('plan')) ? params.get('plan') : 'yearly');
-  const [seats, setSeats] = useState(5);
+  const [planId, setPlanId] = useState(plans.some((p) => p.code === params.get('plan')) ? params.get('plan') : 'yearly');
+  const [courseSlug, setCourseSlug] = useState(params.get('course') || courses[0]?.slug);
   const [f, setF] = useState({ isCompany: planId === 'team', name: '', email: '', company: '', country: 'BE', vat: '', po: '', address: '' });
   const [vatRes, setVatRes] = useState(null);
   const [vatLoading, setVatLoading] = useState(false);
@@ -27,12 +35,15 @@ export default function Order() {
 
   useEffect(() => { scrollTo({ top: 0, behavior: 'smooth' }); }, [step]);
 
-  const plan = PLANS.find((p) => p.id === planId);
+  const course = planId === 'single' ? courses.find((c) => c.slug === courseSlug) : null;
+  // a single course can have its own price (39 or 49 in the catalogue)
+  const basePlan = plans.find((p) => p.code === planId);
+  const plan = course ? { ...basePlan, price_excl: course.single_price } : basePlan;
   const set = (k) => (e) => setF({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
   const vatStatus = f.isCompany && EU.includes(f.country) ? vatRes?.status : undefined;
   const price = useMemo(
-    () => priceOrder({ planId, seats, promo, country: f.country, isCompany: f.isCompany, vatStatus }),
-    [planId, seats, promo, f.country, f.isCompany, vatStatus],
+    () => priceOrder({ plan, promo, country: f.country, isCompany: f.isCompany, vatStatus }),
+    [plan, promo, f.country, f.isCompany, vatStatus],
   );
 
   const runVat = async () => {
@@ -56,7 +67,7 @@ export default function Order() {
   const submit = async () => {
     setSubmitting(true); setError('');
     try {
-      const o = await createOrder({ planId, seats, promo, ...f, vatStatus: vatRes?.status });
+      const o = await createOrder({ planId, plan, course, promo, ...f, vatStatus: vatRes?.status });
       nav(`/order/${o.id}`);
     } catch (e) {
       setError(e.message || 'The order could not be saved. Nothing was charged. Please try again.');
@@ -82,16 +93,19 @@ export default function Order() {
             {step === 0 && (
               <>
                 <div className="grid-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
-                  {PLANS.map((p) => (
-                    <PlanCard key={p.id} plan={p} selected={planId === p.id}
-                      onSelect={() => { setPlanId(p.id); if (p.id === 'team') setF({ ...f, isCompany: true }); }} />
+                  {plans.map((p) => (
+                    <PlanCard key={p.code} plan={p} selected={planId === p.code}
+                      onSelect={() => { setPlanId(p.code); if (p.code === 'team') setF({ ...f, isCompany: true }); }} />
                   ))}
                 </div>
-                {plan.perSeat && (
-                  <Field label="Number of seats" hint={`Minimum ${plan.minSeats}. You can add or remove people later in your account.`}>
-                    <input className="input" type="number" min={plan.minSeats} value={seats} onChange={(e) => setSeats(e.target.value)} style={{ maxWidth: 160 }} />
+                {planId === 'single' && (
+                  <Field label="Which course?" hint={`${courses.length} live courses. Price depends on the course.`}>
+                    <select className="select" value={courseSlug} onChange={(e) => setCourseSlug(e.target.value)}>
+                      {courses.map((c) => <option key={c.slug} value={c.slug}>{c.title} · {eur(c.single_price)}</option>)}
+                    </select>
                   </Field>
                 )}
+                {planId === 'team' && <p className="hint">Five seats. You add your colleagues in your account after payment.</p>}
                 <div><button className="btn btn-ink" onClick={() => setStep(1)}>Continue <Arrow /></button></div>
               </>
             )}
@@ -99,7 +113,7 @@ export default function Order() {
             {step === 1 && (
               <>
                 <div className="toggle" role="group" aria-label="Customer type">
-                  <button className={!f.isCompany ? 'on' : ''} onClick={() => setF({ ...f, isCompany: false })} disabled={plan.id === 'team'}>Private person</button>
+                  <button className={!f.isCompany ? 'on' : ''} onClick={() => setF({ ...f, isCompany: false })} disabled={plan.code === 'team'}>Private person</button>
                   <button className={f.isCompany ? 'on' : ''} onClick={() => setF({ ...f, isCompany: true })}>Company</button>
                 </div>
                 <div className="form-grid">
@@ -116,7 +130,7 @@ export default function Order() {
                     <div className="full stack" style={{ gap: 8 }}>
                       <Field label="VAT number"
                         error={vatRes?.status === 'invalid' ? vatRes.message : null}
-                        hint={needsVat ? 'Checked live in the EU VIES database. Try XX123 to see what happens when VIES is down.' : 'Not needed outside the EU.'}>
+                        hint={needsVat ? 'Checked live in the EU VIES database.' : 'Not needed outside the EU.'}>
                         <div className="row" style={{ flexWrap: 'nowrap' }}>
                           <input className={`input ${vatRes?.status === 'invalid' ? 'bad' : ''}`} value={f.vat} placeholder="BE0123456789"
                             onChange={(e) => { set('vat')(e); setVatRes(null); }} onBlur={runVat} />
@@ -125,7 +139,7 @@ export default function Order() {
                       </Field>
                       {vatRes?.status === 'valid' && <div className="notice"><span className="badge-dot" style={{ marginTop: 7 }} />Valid in VIES: <b>{vatRes.name}</b></div>}
                       {vatRes?.status === 'unavailable' && <div className="notice accent">{vatRes.message}</div>}
-                      <Hook name="vatCheck" note="VIES API" />
+                      <Hook kind="api" path="/api/vat/check" note="real VIES check" />
                     </div>
                   )}
                   {f.isCompany && <Field label="PO number (optional)" hint="Printed on every invoice." className="full"><input className="input" value={f.po} onChange={set('po')} /></Field>}
@@ -170,7 +184,7 @@ export default function Order() {
 
           <aside className="card card-ink summary">
             <div className="label" style={{ marginBottom: 12 }}>Summary</div>
-            <h3 className="h-3" style={{ marginBottom: 16 }}>{plan.name}{plan.perSeat ? ` × ${price.seats}` : ''}</h3>
+            <h3 className="h-3" style={{ marginBottom: 16 }}>{plan.name}{course ? `: ${course.title}` : ''}{plan.seats > 1 ? ` · ${plan.seats} seats` : ''}</h3>
             <div className="sum-row"><span>Subtotal</span><span>{eur(price.gross)}</span></div>
             {price.discount > 0 && <div className="sum-row"><span>Promo {promo.code}</span><span>− {eur(price.discount)}</span></div>}
             <div className="sum-row"><span>{price.vatLabel}</span><span>{eur(price.vat)}</span></div>

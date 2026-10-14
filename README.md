@@ -1,15 +1,31 @@
-# LoopCasts web (frontend)
+# LoopCasts web
 
-New website for LoopCasts (video courses, Gent). This is the frontend only: it runs on mock data and every place where an n8n workflow will plug in is marked.
+New website for LoopCasts (video courses, Gent) with the automations built in.
+Plan and reasoning per automation: [docs/backend-plan.md](docs/backend-plan.md).
 
-## Run
+| Part | Status |
+|---|---|
+| Frontend (React + Vite) | done, design and all pages |
+| Database (PostgreSQL) with the real cleaned data | done (step 1) |
+| API (Node + Fastify): products, catalog, search, live VIES VAT check | done (step 1) |
+| Login, reset, account, orders, n8n workflows, support AI | next steps, still mocked in the UI |
+
+## Run locally
+
+Needs Docker Desktop, Node 22 and Python 3 (pandas, openpyxl).
 
 ```bash
+cp .env.example .env            # then put real random values in it
 npm install
-npm run dev
+docker compose up -d            # Postgres, n8n (localhost:5678), Mailpit (localhost:8025)
+# put the dataset (LoopCasts.zip) unzipped in data/raw/, then:
+npm run data:clean              # messy Excel/CSV/SQL -> data/clean/*.csv + docs/data-quality.md
+npm run db:migrate              # create tables
+npm run db:seed                 # load the clean data
+npm run dev                     # site on http://localhost:5173 + API on :3001
 ```
 
-Open http://localhost:5173. Demo login: any email and a password of 6+ characters.
+Demo login (still mocked): any email and a password of 6+ characters.
 
 ## Pages
 
@@ -28,6 +44,12 @@ Open http://localhost:5173. Demo login: any email and a password of 6+ character
 | `/flows` | User flows and the webhook map, for the team | |
 
 User flows in text: [docs/user-flows.md](docs/user-flows.md).
+
+## Data
+
+`scripts/clean_data.py` turns the Dropbox export into tidy tables: dates in 4+ formats, countries written 37 ways,
+prices like `€ 149` / `149,00`, levels like `easy`/`Beginner`, and paid status that only existed as a cell colour.
+Findings are in [docs/data-quality.md](docs/data-quality.md). The raw dataset and `.env` are never committed.
 
 ## Connecting n8n later
 

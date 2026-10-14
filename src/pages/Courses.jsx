@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { BlobField } from '../components/Blobs.jsx';
-import CourseCard from '../components/CourseCard.jsx';
+import CourseCard, { Skeleton } from '../components/CourseCard.jsx';
 import { PageHead } from '../components/ui.jsx';
-import { COURSES, TAGS } from '../data/catalog.js';
-
-const LEVELS = ['All levels', 'Beginner', 'Intermediate', 'Advanced'];
+import { LEVELS } from '../data/catalog.js';
+import { getCourses } from '../lib/api.js';
+import { useApi } from '../lib/useApi.js';
 
 export default function Courses() {
-  const [tag, setTag] = useState('All');
-  const [level, setLevel] = useState('All levels');
-  const list = COURSES.filter((c) => (tag === 'All' || c.tag === tag) && (level === 'All levels' || c.level === level));
+  const [level, setLevel] = useState('');
+  const [sort, setSort] = useState('popular');
+  const { data, error, loading } = useApi(() => getCourses({ ...(level && { level }), sort }), [level, sort]);
 
   return (
     <div className="page">
@@ -19,20 +19,23 @@ export default function Courses() {
       ]} />
       <div className="wrap" style={{ position: 'relative' }}>
         <PageHead label="Catalog" title={<>All <span className="serif">courses</span></>}>
-          <p className="lead">One catalog, one source of truth. Course pages, lesson pages and durations are generated from the same data.</p>
+          <p className="lead">One catalog, one source of truth. Courses, lessons and durations come from the same database as the Vimeo videos.</p>
         </PageHead>
         <div className="between" style={{ marginBottom: 32 }}>
           <div className="row">
-            {TAGS.map((t) => <button key={t} className={`chip ${tag === t ? 'on' : ''}`} onClick={() => setTag(t)}>{t}</button>)}
+            <button className={`chip ${!level ? 'on' : ''}`} onClick={() => setLevel('')}>All levels</button>
+            {LEVELS.map((l) => <button key={l} className={`chip ${level === l ? 'on' : ''}`} onClick={() => setLevel(l)}>{l}</button>)}
           </div>
-          <select className="select" style={{ width: 200 }} value={level} onChange={(e) => setLevel(e.target.value)} aria-label="Level">
-            {LEVELS.map((l) => <option key={l}>{l}</option>)}
-          </select>
+          <div className="toggle" role="group" aria-label="Sort">
+            <button className={sort === 'popular' ? 'on' : ''} onClick={() => setSort('popular')}>Popular</button>
+            <button className={sort === 'new' ? 'on' : ''} onClick={() => setSort('new')}>Newest</button>
+          </div>
         </div>
+        {error && <div className="notice accent">Could not load the catalog: {error.message}. Is the API running (npm run dev)?</div>}
         <div className="grid-3">
-          {list.map((c, i) => <CourseCard key={c.slug} course={c} i={i} />)}
+          {loading ? <Skeleton n={6} /> : data?.map((c, i) => <CourseCard key={c.slug} course={c} i={i} />)}
         </div>
-        {list.length === 0 && <p className="dim">No courses match these filters.</p>}
+        {!loading && data && <p className="hint" style={{ marginTop: 24 }}>{data.length} live courses.</p>}
       </div>
     </div>
   );
