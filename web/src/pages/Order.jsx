@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { COURSES, PLANS } from '../data/site.js'
+import { PLANS } from '../data/site.js'
+import { COURSES, TOPICS, findCourse } from '../data/courses.js'
 import { COUNTRIES, EU_COUNTRIES, calculateVat, euro, looksLikeVatNumber } from '../lib/vat.js'
 import { useSession } from '../lib/session.jsx'
+import { useAdmin } from '../lib/adminStore.jsx'
 import '../styles/order.css'
 
 // Where the order goes. Empty = demo mode: the form validates and shows the result, nothing is sent.
@@ -74,7 +76,8 @@ export default function Order() {
     product: PLANS.some((p) => p.id === params.get('product')) ? params.get('product') : 'yearly',
     course: COURSES.some((c) => c.slug === params.get('course')) ? params.get('course') : COURSES[0].slug,
   }))
-  const { signIn } = useSession()
+  const { member, signIn } = useSession()
+  const { placeOrder, payFromSite } = useAdmin()
   const navigate = useNavigate()
   const [touched, setTouched] = useState(false)
   const [state, setState] = useState({ status: 'idle' }) // idle | sending | done | failed
@@ -135,7 +138,9 @@ export default function Order() {
       } else {
         await new Promise((resolve) => setTimeout(resolve, 900))
       }
-      setState({ status: 'done', payload, demo: !WEBHOOK_URL, totals: vat })
+      // demo mode: the order goes into the admin panel's sample data, like n8n will do later
+      const placed = WEBHOOK_URL ? null : placeOrder(payload, vat)
+      setState({ status: 'done', payload, demo: !WEBHOOK_URL, totals: vat, invoice: placed?.invoice })
     } catch (error) {
       // Nothing fails silently: the customer is told, and can try again without retyping.
       setState({ status: 'failed', message: error.message })
@@ -147,32 +152,46 @@ export default function Order() {
   function simulatePayment() {
     const { payload, totals } = state
     const today = new Date()
-    const end = new Date(today)
-    if (payload.product === 'monthly') end.setMonth(end.getMonth() + 1)
-    else end.setFullYear(end.getFullYear() + 1)
-    signIn({
-      firstName: payload.customer.firstName,
-      lastName: payload.customer.lastName,
-      email: payload.customer.email,
-      plan: payload.product,
-      course: payload.course,
-      since: today.toISOString().slice(0, 10),
-      endDate: end.toISOString().slice(0, 10),
-      progress: {},
-      invoices: [
-        {
-          number: '2026-0144',
-          date: today.toISOString().slice(0, 10),
-          product: plan.name,
-          excl: plan.price,
-          vat: totals.vat,
-          total: totals.total,
-          reference: '+++144/2026/00288+++',
-          status: 'paid',
-        },
-      ],
-    })
-    navigate('/account')
+    const iso = (d) => d.toISOString().slice(0, 10)
+    const placed = state.invoice
+    const invoice = {
+      number: placed.number,
+      date: iso(today),
+      product: payload.product === 'single' ? `Single course: ${findCourse(payload.course).title}` : plan.name,
+      excl: plan.price,
+      vat: totals.vat,
+      total: totals.total,
+      reference: placed.reference,
+      status: 'paid',
+    }
+    payFromSite(placed.number)
+    // the same person ordering again keeps their account and progress
+    const same = member && member.email === payload.customer.email
+    const base = same
+      ? member
+      : {
+          role: 'member',
+          firstName: payload.customer.firstName,
+          lastName: payload.customer.lastName,
+          email: payload.customer.email,
+          plan: null,
+          endDate: null,
+          courses: [],
+          since: iso(today),
+          progress: {},
+          invoices: [],
+        }
+    let next = { ...base, invoices: [invoice, ...base.invoices] }
+    if (payload.product === 'single') {
+      next = { ...next, courses: [...new Set([...(base.courses || []), payload.course])] }
+    } else {
+      const end = new Date(today)
+      if (payload.product === 'monthly') end.setMonth(end.getMonth() + 1)
+      else end.setFullYear(end.getFullYear() + 1)
+      next = { ...next, plan: payload.product, endDate: iso(end) }
+    }
+    signIn(next)
+    navigate(payload.product === 'single' ? `/courses/${payload.course}` : '/account')
   }
 
   if (state.status === 'done') {
@@ -189,6 +208,12 @@ export default function Order() {
             <li><b>03</b>You pay by bank transfer and mention the reference.</li>
             <li><b>04</b>Your payment is matched and your login arrives by itself.</li>
           </ol>
+          {state.invoice && (
+            <div className="order__invoice">
+              <span>Invoice <b>{state.invoice.number}</b> · {euro(state.invoice.total)}</span>
+              <span>Reference <b className="mono-ref">{state.invoice.reference}</b></span>
+            </div>
+          )}
           {state.demo && (
             <details className="payload">
               <summary>Demo mode: nothing was sent. This is the data the webhook will receive.</summary>
@@ -237,8 +262,12 @@ export default function Order() {
               <label className="field">
                 <span className="field__label">Which course?</span>
                 <select value={values.course} onChange={(e) => set('course', e.target.value)}>
-                  {COURSES.map((c) => (
-                    <option key={c.slug} value={c.slug}>{c.title}</option>
+                  {TOPICS.map((t) => (
+                    <optgroup key={t.id} label={t.label}>
+                      {COURSES.filter((c) => c.topic === t.id).map((c) => (
+                        <option key={c.slug} value={c.slug}>{c.title}</option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </label>
@@ -322,7 +351,13 @@ export default function Order() {
         <aside className="summary">
           <span className="eyebrow">Your order</span>
           <h2>{plan.name}</h2>
-          <p className="summary__blurb">{plan.blurb}</p>
+          {values.product === 'single' ? (
+            <p className="summary__blurb">
+              {findCourse(values.course).title}: {findCourse(values.course).videos} lessons, yours for good.
+            </p>
+          ) : (
+            <p className="summary__blurb">{plan.blurb}</p>
+          )}
           <dl>
             <div><dt>Price</dt><dd>{euro(plan.price)}</dd></div>
             <div><dt>{vat.note}</dt><dd>{euro(vat.vat)}</dd></div>

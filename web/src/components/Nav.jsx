@@ -4,7 +4,7 @@ import { useSession } from '../lib/session.jsx'
 import '../styles/nav.css'
 
 const LINKS = [
-  { id: 'courses', label: 'Courses' },
+  { id: 'courses', label: 'Courses', to: '/courses' },
   { id: 'learn', label: 'How it works' },
   { id: 'pricing', label: 'Pricing' },
   { id: 'faq', label: 'FAQ' },
@@ -58,17 +58,23 @@ export default function Nav({ onNav }) {
         </Link>
 
         <div className="nav__links">
-          {LINKS.map((l) => (
-            <button key={l.id} className="nav__link" onClick={() => go(l.id)}>
-              {l.label}
-            </button>
-          ))}
+          {LINKS.map((l) =>
+            l.to ? (
+              <Link key={l.id} to={l.to} className={`nav__link ${pathname.startsWith(l.to) ? 'is-active' : ''}`}>
+                {l.label}
+              </Link>
+            ) : (
+              <button key={l.id} className="nav__link" onClick={() => go(l.id)}>
+                {l.label}
+              </button>
+            ),
+          )}
         </div>
 
         <div className="nav__actions">
           {member ? (
-            <Link to="/account" className={`key key--sm ${solid ? 'key--dark' : 'key--light'}`}>
-              My courses
+            <Link to={member.role === 'staff' ? '/admin' : '/account'} className={`key key--sm ${solid ? 'key--dark' : 'key--light'}`}>
+              {member.role === 'staff' ? 'Admin' : 'My courses'}
             </Link>
           ) : (
             <>
@@ -93,12 +99,18 @@ export default function Nav({ onNav }) {
       </div>
 
       <div className="nav__sheet">
-        {LINKS.map((l) => (
-          <button key={l.id} onClick={() => go(l.id)}>
-            {l.label}
-          </button>
-        ))}
-        {member ? <Link to="/account">My account</Link> : <Link to="/login">Sign in</Link>}
+        {LINKS.map((l) =>
+          l.to ? (
+            <Link key={l.id} to={l.to}>
+              {l.label}
+            </Link>
+          ) : (
+            <button key={l.id} onClick={() => go(l.id)}>
+              {l.label}
+            </button>
+          ),
+        )}
+        {member ? <Link to={member.role === 'staff' ? '/admin' : '/account'}>{member.role === 'staff' ? 'Admin' : 'My account'}</Link> : <Link to="/login">Sign in</Link>}
       </div>
     </nav>
   )

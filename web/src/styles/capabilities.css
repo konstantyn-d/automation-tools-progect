@@ -75,26 +75,6 @@
 .cap--flip .pane--front { right: auto; left: 0; }
 .cap--flip .cap__art:hover .pane--front { transform: translate(6px, -6px); }
 .pane__title { display: block; font-weight: 520; color: var(--heading); margin-bottom: 12px; }
-.mono { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  height: 20px;
-  padding: 0 7px;
-  border-radius: 5px;
-  background: var(--panel);
-  border: 1px solid var(--edge);
-  font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  color: var(--body);
-  white-space: nowrap;
-}
-.chip--ok { background: var(--ok-soft); border-color: transparent; color: #1f7a3a; }
-.chip--info { background: var(--info-soft); border-color: transparent; color: #1f5fb0; }
-.chip--warn { background: var(--warn-soft); border-color: transparent; color: #8a5d06; }
-.chip--error { background: var(--error-soft); border-color: transparent; color: #b3362f; }
 
 .fields { margin: 0; display: flex; flex-direction: column; }
 .fields div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--edge); }

@@ -7,6 +7,7 @@ import '@fontsource/ibm-plex-mono/500.css'
 import './styles/global.css'
 import App from './App.jsx'
 import { SessionProvider } from './lib/session.jsx'
+import { AdminStoreProvider } from './lib/adminStore.jsx'
 
 // The shareable single-file preview has no server behind it, so it keeps the route in memory.
 const Router = import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : BrowserRouter
@@ -15,7 +16,9 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
       <SessionProvider>
-        <App />
+        <AdminStoreProvider>
+          <App />
+        </AdminStoreProvider>
       </SessionProvider>
     </Router>
   </StrictMode>,

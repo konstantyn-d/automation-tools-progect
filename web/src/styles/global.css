@@ -268,3 +268,31 @@ button {
 .icon { display: inline-block; flex: none; }
 .back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--faint); }
 .back:hover { color: var(--heading); }
+
+/* two to four options side by side, one chosen */
+.segmented { display: inline-flex; align-self: flex-start; padding: 3px; border-radius: 10px; background: #e9e9e5; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08); }
+.segmented button { padding: 7px 14px; border: 0; border-radius: 8px; background: transparent; color: var(--body); font-size: 14px; }
+.segmented .is-on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
+.segmented button { transition: background-color 0.15s, color 0.15s; }
+
+/* small labels used across the site and the admin */
+.mono { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 5px;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--body);
+  white-space: nowrap;
+}
+.chip--ok { background: var(--ok-soft); border-color: transparent; color: #1f7a3a; }
+.chip--info { background: var(--info-soft); border-color: transparent; color: #1f5fb0; }
+.chip--warn { background: var(--warn-soft); border-color: transparent; color: #8a5d06; }
+.chip--error { background: var(--error-soft); border-color: transparent; color: #b3362f; }

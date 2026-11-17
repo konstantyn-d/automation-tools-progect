@@ -61,13 +61,18 @@ export function useSession() {
 
 // The rule that decides whether a lesson plays or shows the lock.
 //  - the first lesson of every course is free
+//  - a course bought on its own stays open for good
 //  - a subscription or team licence opens everything until its end date
-//  - a single course opens that one course for good
+export function hasSubscription(member) {
+  if (!member?.plan || !member.endDate) return false
+  return new Date(member.endDate) >= new Date(new Date().toDateString())
+}
+
 export function canWatch(member, course, lesson) {
   if (lesson.free) return true
   if (!member) return false
-  if (member.plan === 'single') return member.course === course.slug
-  return new Date(member.endDate) >= new Date(new Date().toDateString())
+  if (member.courses?.includes(course.slug)) return true
+  return hasSubscription(member)
 }
 
 export function hasCourse(member, course) {

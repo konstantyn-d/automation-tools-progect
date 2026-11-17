@@ -77,9 +77,9 @@ export default function Hero({ onNav }) {
           have something working by the end of every lesson.
         </p>
         <div className="hero__actions">
-          <button className="key key--light" onClick={() => onNav('courses')}>
-            Browse the courses <span className="arrow">→</span>
-          </button>
+          <Link className="key key--light" to="/courses">
+            Browse all 60 courses <span className="arrow">→</span>
+          </Link>
           <Link className="key key--glass" to="/courses/n8n-basics/1">
             <PlayIcon size={1.5} /> Watch a free lesson
           </Link>

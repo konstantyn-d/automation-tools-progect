@@ -28,9 +28,6 @@
 .choice__price { grid-row: span 2; align-self: center; font-family: var(--font-pixel); font-size: 22px; letter-spacing: -0.04em; color: var(--heading); }
 .choice__unit { font-size: 12px; color: var(--faint); }
 
-.segmented { display: inline-flex; align-self: flex-start; padding: 3px; border-radius: 10px; background: #e9e9e5; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08); }
-.segmented button { padding: 7px 14px; border: 0; border-radius: 8px; background: transparent; color: var(--body); font-size: 14px; }
-.segmented .is-on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
 
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
@@ -102,3 +99,7 @@
 }
 
 .order__after { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.order__invoice { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin: 20px 0 0; padding: 12px 16px; border-radius: var(--r-row); background: var(--panel); font-size: 14px; }
+.order__invoice b { color: var(--ink); font-weight: 520; }
+.mono-ref { font-family: var(--font-mono); letter-spacing: 0.02em; }

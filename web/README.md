@@ -26,12 +26,18 @@ scenes: customers never see it, the team sees it in the admin panel.
 | Page | What it does |
 | --- | --- |
 | `/` | Landing page: courses, how learning works, prices, FAQ |
-| `/courses/:slug` | One course: summary, what you learn, all lessons |
+| `/courses` | Catalogue of all 60 courses: search (press `/`), topic, level, sort. Filters live in the URL |
+| `/courses/:slug` | One course: summary, what you learn, all lessons, buy this course on its own |
 | `/courses/:slug/:nr` | One lesson: player, chapters, transcript. Locked lessons show the offer instead |
 | `/order` | Order form with validation and VAT |
 | `/login` | Sign in and "forgot password" |
 | `/account` | Member area: progress per course, subscription, invoices, profile |
-| `/admin` | Admin panel, first screen: order runs and recent orders |
+| `/admin` | Admin panel overview: numbers, what needs a person, revenue, test run of the order chain |
+| `/admin/orders` | Every order with its five steps. Approve an order that stopped, retry a failed step |
+| `/admin/invoices` | Invoices with a gap and double check, invoice preview, reminders |
+| `/admin/payments` | Import a bank export (CSV), run payment matching, match the rest by hand |
+| `/admin/members` | Who has access until when, renew, close or open access |
+| `/admin/support` | Support inbox: category, language, facts found, draft answer to approve |
 
 ```
 src/
@@ -40,8 +46,17 @@ src/
   pages/              one file per page
   sections/           the blocks of the landing page, top to bottom
   components/         shared pieces: navigation, course cover, lesson list, player, pipeline, pixel art
-  data/site.js        courses with their lessons, plans, FAQ
-  data/member.js      the sample member and sample orders
+  pages/admin/        the six admin screens and their frame
+  components/admin/   shared admin pieces: tabs, search, drawer, status labels
+  components/DemoSwitch.jsx   TEMPORARY: view the site as visitor, member or staff
+  data/courses.js     the 60 courses with their lessons
+  data/site.js        plans, FAQ
+  data/member.js      the sample member and the sample staff person
+  data/admin.js       sample month for the admin: customers, orders, invoices, bank, members, mails
+  lib/adminStore.jsx  admin data and every admin action (later: API calls)
+  lib/matching.js     payment matching rules and the bank CSV reader
+  lib/invoice.js      invoice numbers and Belgian structured references (mod 97)
+  lib/search.jsx      catalogue search
   lib/session.jsx     who is signed in, and the rule that decides if a lesson plays
   lib/vat.js          VAT rules from the finance handbook
   lib/pipeline.js     the order chain as data (see below)
@@ -50,12 +65,18 @@ src/
 
 ## What is still pretend
 
-This is the front end. Three things are stand-ins until the back end and n8n are connected:
+This is the front end. These things are stand-ins until the back end and n8n are connected:
 
 - **Accounts.** Any e-mail and password sign you in as a sample member (`data/member.js`).
   The session is kept in the browser. `lib/session.jsx` is the only file that has to change.
 - **Payment.** After an order the button "Demo: the payment arrived" creates the account, so the
   whole journey can be shown. In the real flow n8n does this when the bank transfer is matched.
+- **Admin data.** `data/admin.js` builds a believable month of orders, invoices, bank lines,
+  members and support mails, dated relative to today. Every button in the admin changes it through
+  `lib/adminStore.jsx`, and the changes stay in the browser ("Reset sample data" starts over).
+  A demo order on the site shows up in the admin as a new order with its own invoice.
+- **Roles.** The dark switch bottom left (Visitor / Member / Staff) is temporary. It can be hidden
+  and goes away when real accounts exist. `/admin` only opens for staff.
 - **Video.** The player keeps time, chapters and "watched", but shows an animation instead of a
   video file. `components/Player.jsx` says where the real embed goes.
 
@@ -81,7 +102,25 @@ JSON it would have sent.
 
 If the webhook does not answer, the customer sees a clear message and keeps what was typed.
 
-**2. The admin panel (`/admin`) shows a run, using `src/lib/pipeline.js`.**
+**2. The admin panel (`/admin`) handles the exceptions.**
+Every action in `lib/adminStore.jsx` is one thing the back end or n8n will do: make the next
+invoice number, send a reminder, match a bank line, give access. The screens call these actions
+and do not know where the data comes from, so the swap to a real API stays in one file.
+
+Payment matching (`lib/matching.js`) decides in this order:
+
+1. The structured reference belongs to an open invoice and the amount is equal: matched.
+   Too little, too much or paid twice: a person checks.
+2. The message holds an invoice number and the amount is equal: matched.
+3. No reference, but one open invoice has the same amount and the name fits: a suggestion
+   for a person to confirm.
+4. Nothing fits: a person looks. Nothing is matched by guessing.
+
+The bank import reads CSV with `;` or `,` and finds the columns by name
+(`date;amount;name;iban;message`, also Dutch headers such as `datum;bedrag;mededeling`).
+The Payments screen can download a sample file.
+
+**3. The overview shows a test run, using `src/lib/pipeline.js`.**
 Right now `playRun()` plays the five steps with timers. Each step sends small events:
 
 ```js

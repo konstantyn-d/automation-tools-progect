@@ -50,7 +50,7 @@ export default function Closing({ onNav }) {
 
           <div className="closing__links">
             <p className="closing__inline">
-              <button onClick={() => onNav('courses')}>Courses</button>
+              <Link to="/courses">All courses</Link>
               <button onClick={() => onNav('learn')}>How it works</button>
               <button onClick={() => onNav('pricing')}>Pricing</button>
               <button onClick={() => onNav('faq')}>FAQ</button>

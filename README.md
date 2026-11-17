@@ -7,7 +7,7 @@ one. This project automates that chain and gives the team an admin panel for the
 
 | Folder | What it is |
 | --- | --- |
-| `web/` | The website: course shop, member area and admin panel (React + Vite) |
+| `web/` | The website: course catalogue, member area and admin panel (React + Vite). Front end finished, runs on sample data |
 
 Coming next: the back end (database, n8n workflows, local mail) running in Docker.
 

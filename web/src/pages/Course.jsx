@@ -4,7 +4,7 @@ import CourseCover from '../components/CourseCover.jsx'
 import LessonList from '../components/LessonList.jsx'
 import { CheckIcon, PlayIcon } from '../components/icons.jsx'
 import ComingSoon from './ComingSoon.jsx'
-import { COURSES, findCourse } from '../data/site.js'
+import { COURSES, findCourse, topicLabel } from '../data/courses.js'
 import { hasCourse, useSession } from '../lib/session.jsx'
 import '../styles/courses.css'
 import '../styles/course.css'
@@ -22,15 +22,21 @@ export default function Course() {
   const owned = hasCourse(member, course)
   const watched = member?.progress[course.slug] || []
   const next = course.lessons.find((l) => !watched.includes(l.nr)) || course.lessons[0]
-  const others = COURSES.filter((c) => c.slug !== course.slug).slice(0, 3)
+  // more from the same topic first, then the most watched
+  const others = [...COURSES]
+    .filter((c) => c.slug !== course.slug)
+    .sort((a, b) => (b.topic === course.topic) - (a.topic === course.topic) || b.students - a.students)
+    .slice(0, 3)
 
   return (
     <main className="course">
       <section className="container course__head">
         <div className="course__intro">
-          <Link to="/" state={{ scrollTo: 'courses' }} className="back">
-            <span aria-hidden="true">←</span> All courses
-          </Link>
+          <nav className="crumbs" aria-label="Breadcrumb">
+            <Link to="/courses">All courses</Link>
+            <span aria-hidden="true">/</span>
+            <Link to={`/courses?topic=${course.topic}`}>{topicLabel(course.topic)}</Link>
+          </nav>
           <p className="eyebrow">
             Course {course.nr} · {course.level}
           </p>
@@ -69,7 +75,7 @@ export default function Course() {
 
         <div className="course__cover cover-mount">
           <div className="cover cover--static">
-            <CourseArt name={course.art} />
+            <CourseArt name={course.art} tone={course.tone} />
           </div>
         </div>
       </section>
@@ -126,7 +132,12 @@ export default function Course() {
       </section>
 
       <section className="container course__more">
-        <h2 className="course__h">More courses</h2>
+        <div className="course__more-head">
+          <h2 className="course__h">More in {topicLabel(course.topic)}</h2>
+          <Link to={`/courses?topic=${course.topic}`} className="back">
+            See all <span aria-hidden="true">→</span>
+          </Link>
+        </div>
         <div className="covers">
           {others.map((c) => (
             <div key={c.slug} className="cover-mount">

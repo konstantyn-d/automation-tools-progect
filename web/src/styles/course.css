@@ -2,7 +2,9 @@
 .course { padding: calc(var(--nav-h) + 48px) 0 112px; }
 .course__head { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 72px; align-items: center; }
 .course__intro { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
-.course__intro .back { margin-bottom: 12px; }
+.crumbs { display: flex; gap: 8px; margin-bottom: 12px; font-size: 13px; color: var(--faint); }
+.crumbs a:hover { color: var(--heading); text-decoration: underline; text-underline-offset: 2px; }
+.course__more-head { display: flex; justify-content: space-between; align-items: baseline; }
 .course__intro .lede { max-width: 520px; }
 .course__meta { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; padding: 0; }
 .course__meta li {

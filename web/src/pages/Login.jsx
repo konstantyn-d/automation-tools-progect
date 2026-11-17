@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Wordmark } from '../components/Nav.jsx'
-import { DEMO_MEMBER } from '../data/member.js'
+import { DEMO_MEMBER, DEMO_STAFF } from '../data/member.js'
 import { useSession } from '../lib/session.jsx'
 import '../styles/order.css'
 import '../styles/account.css'
@@ -17,7 +17,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  if (member) return <Navigate to={state?.next || '/account'} replace />
+  if (member) return <Navigate to={state?.next || (member.role === 'staff' ? '/admin' : '/account')} replace />
 
   const validEmail = /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email.trim())
 
@@ -86,6 +86,9 @@ export default function Login() {
               onClick={() => { setEmail(DEMO_MEMBER.email); setPassword('demo-password'); setError('') }}
             >
               Fill in the sample member
+            </button>
+            <button type="button" className="key key--light key--sm" onClick={() => signIn(DEMO_STAFF)}>
+              Sign in as staff (demo)
             </button>
           </div>
         )}

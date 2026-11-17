@@ -9,7 +9,7 @@ export default function CourseCover({ course }) {
         <h3>{course.title}</h3>
         <span className="cover__level">{course.level}</span>
       </header>
-      <CourseArt name={course.art} />
+      <CourseArt name={course.art} tone={course.tone} />
       <footer>
         <span>Course {course.nr}</span>
         <span>

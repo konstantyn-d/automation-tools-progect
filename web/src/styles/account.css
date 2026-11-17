@@ -51,10 +51,6 @@
 .invoice dt { color: var(--body); }
 .invoice dd { margin: 0; color: var(--heading); font-variant-numeric: tabular-nums; }
 
-/* --- admin --- */
-.admin { padding: calc(var(--nav-h) + 56px) 0 112px; }
-.admin .h-section { margin: 14px 0 16px; max-width: 720px; }
-.admin__stage { margin: 48px auto 72px; padding: 0 24px; }
 .table-wrap { overflow-x: auto; background: var(--raised); border-radius: var(--r-frame); box-shadow: var(--shadow-frame); }
 .table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; }
 .table th { padding: 12px 16px; text-align: left; font-family: var(--font-mono); font-weight: 400; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
@@ -69,3 +65,12 @@
   .mycourse { grid-template-columns: 52px minmax(0, 1fr); }
   .mycourse > .key { grid-column: 2; justify-self: start; }
 }
+
+.account__empty p { color: var(--body); }
+.tiles--four { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.tiles--four .tile h3 { font-size: 14.5px; }
+@media (max-width: 1180px) { .tiles--four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* temporary demo card */
+.card--demo { background: transparent; box-shadow: none; border: 1px dashed #d6d6d1; }
+.card--demo p { font-size: 14px; }
