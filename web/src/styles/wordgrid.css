@@ -1,0 +1,74 @@
+.grid-section { padding: 120px 0; }
+.grid-section__head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; margin-bottom: 60px; }
+.grid-section__title { font-size: 32px; line-height: 1.15; font-weight: 400; letter-spacing: 0.01em; color: var(--heading); }
+.grid-section__title .soft { color: var(--faint); }
+
+.letters {
+  --cell-w: 41px;
+  --cell-h: 50px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell-w));
+  grid-auto-rows: var(--cell-h);
+  width: max-content;
+  margin: 0 auto;
+  font-family: var(--font-pixel);
+  font-size: 24px;
+  line-height: 1;
+  color: rgba(38, 35, 35, 0.32);
+}
+.letters span { display: grid; place-items: center; transition: color 0.4s; transition-delay: calc(var(--w) * 0.22s + 0.3s); }
+.letters--found .hit { color: var(--heading); }
+/* the outline that "finds" a word: it is revealed from left to right */
+.capsule {
+  position: absolute;
+  top: calc(var(--row) * var(--cell-h) + 5px);
+  left: calc(var(--col) * var(--cell-w) + 1px);
+  width: calc(var(--len) * var(--cell-w) - 2px);
+  height: calc(var(--cell-h) - 10px);
+  border: 2px solid #8cc4f5;
+  border-radius: 12px;
+  background: rgba(140, 196, 245, 0.1);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.6s steps(12);
+  transition-delay: calc(var(--w) * 0.22s + 0.2s);
+}
+.letters--found .capsule { clip-path: inset(0 0 0 0); }
+
+.topics {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 940px) {
+  .grid-section { padding: 72px 0; }
+  .grid-section__head { margin-bottom: 32px; }
+  .grid-section__title { font-size: 28px; }
+  .letters { display: none; }
+  .topics {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .topics li {
+    padding: 8px 12px;
+    border: 2px solid #8cc4f5;
+    border-radius: 10px;
+    background: rgba(140, 196, 245, 0.1);
+    font-family: var(--font-pixel);
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    color: var(--heading);
+  }
+}

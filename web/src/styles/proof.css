@@ -1,0 +1,30 @@
+.proof { padding: 56px 0 24px; }
+.proof__line { text-align: center; color: var(--faint); margin-bottom: 24px; }
+.proof__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--edge);
+  border: 1px solid var(--edge);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(152, 146, 140, 0.12);
+}
+.proof__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 20px 22px;
+  background: var(--panel);
+}
+.proof__value {
+  font-family: var(--font-pixel);
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--heading);
+}
+.proof__label { font-size: 13px; color: var(--faint); max-width: 200px; }
+@media (max-width: 760px) {
+  .proof__grid { grid-template-columns: repeat(2, 1fr); }
+}

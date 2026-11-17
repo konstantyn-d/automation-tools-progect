@@ -1,0 +1,210 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 660px;
+  max-height: 980px;
+  overflow: hidden;
+  background: #1c72d2;
+  color: #fff;
+  --sy: 0; /* px scrolled, set from Hero.jsx */
+}
+/* scroll parallax: far things move less than near things */
+.hero-scene { transform: translateY(calc(var(--sy) * 0.28px)); will-change: transform; }
+.hero__copy { transform: translateY(calc(var(--sy) * -0.12px)); opacity: calc(1 - var(--sy) / 520); }
+.notices { transform: translateY(calc(var(--sy) * 0.12px)); opacity: calc(1 - var(--sy) / 620); }
+.hero-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* A deeper band of sky behind the copy. It sits on top of the skyline and clouds,
+   so white text keeps the same calm background at every screen size. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 56, 130, 0.9) 0%, rgba(10, 56, 130, 0.78) 30%, rgba(10, 56, 130, 0.32) 50%, rgba(10, 56, 130, 0) 64%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 52%, transparent 70%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 52%, transparent 70%);
+  pointer-events: none;
+}
+.hero__copy {
+  position: relative;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: calc(var(--nav-h) + clamp(40px, 9vh, 96px)) 32px 0;
+}
+.hero__copy > * {
+  animation: hero-enter 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.hero__copy > :nth-child(2) { animation-delay: 0.08s; }
+.hero__copy > :nth-child(3) { animation-delay: 0.16s; }
+.hero__copy > :nth-child(4) { animation-delay: 0.24s; }
+.hero__copy > :nth-child(5) { animation-delay: 0.32s; }
+@keyframes hero-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 18px;
+}
+.hero__title {
+  max-width: 600px;
+  font-size: 50px;
+  line-height: 1.06;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-wrap: balance;
+}
+.hero__support {
+  max-width: 500px;
+  margin-top: 20px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #fff;
+}
+.hero__fine {
+  margin-top: 22px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.82);
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* --- status notices above the machine --- */
+.notices {
+  position: absolute;
+  /* The scene is an SVG that "covers" the hero. --s is how many px one scene pixel is on screen,
+     so the notices can be anchored to the machine instead of to the viewport. */
+  --s: max(100vw / 480, clamp(660px, 100vh, 980px) / 300);
+  right: max(16px, calc(50vw - var(--s) * 176));
+  bottom: calc(var(--s) * 123);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 268px;
+}
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(14, 62, 34, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 6px 16px -8px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  font-size: 13px;
+  color: #fff;
+  animation: notice-pop 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.notice__dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  background: #5fe07f;
+  box-shadow: 0 0 8px currentColor;
+}
+.notice__dot--blue { background: #6cb8ff; color: #6cb8ff; }
+.notice__dot--yellow { background: #ffd23f; color: #ffd23f; }
+.notice__dot--green { background: #5fe07f; color: #5fe07f; }
+.notice__meta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.66);
+  white-space: nowrap;
+}
+@keyframes notice-pop {
+  from { opacity: 0; transform: translateY(10px) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+/* --- scene animation --- */
+.drift { animation: drift 90s linear infinite alternate; }
+.drift--b { animation-duration: 120s; animation-direction: alternate-reverse; }
+.drift--c { animation-duration: 150s; }
+@keyframes drift {
+  from { transform: translateX(-14px); }
+  to { transform: translateX(22px); }
+}
+.birds { animation: birds 46s linear infinite; }
+@keyframes birds {
+  from { transform: translate(-340px, 10px); }
+  to { transform: translate(220px, -22px); }
+}
+.shimmer { animation: shimmer 2.4s steps(2, jump-none) infinite; }
+@keyframes shimmer {
+  50% { opacity: 0.25; }
+}
+.belt-marks { animation: belt 0.9s steps(8) infinite; }
+@keyframes belt {
+  to { transform: translateX(8px); }
+}
+.lamp { animation: lamp 3s steps(1) infinite; }
+.lamp--0 { animation-delay: -0.6s; }
+.lamp--1 { animation-delay: -1.6s; }
+.lamp--2 { animation-delay: -2.5s; }
+@keyframes lamp {
+  0%, 70% { opacity: 0.35; }
+  71%, 100% { opacity: 1; }
+}
+.stamp { animation: stamp 3s steps(1) infinite; animation-delay: -0.75s; }
+@keyframes stamp {
+  0%, 82% { transform: translateY(0); }
+  83%, 92% { transform: translateY(5px); }
+  93%, 100% { transform: translateY(0); }
+}
+
+/* one parcel travels the whole belt in 9 seconds; three parcels are 3 seconds apart */
+.parcel { animation: parcel-move 9s steps(116) infinite; }
+@keyframes parcel-move {
+  from { transform: translateX(0); }
+  to { transform: translateX(108px); }
+}
+.parcel__stage { opacity: 0; animation: 9s steps(1) infinite; }
+.parcel__stage--0 { animation-name: stage-0; }
+.parcel__stage--1 { animation-name: stage-1; }
+.parcel__stage--2 { animation-name: stage-2; }
+.parcel__stage--3 { animation-name: stage-3; }
+@keyframes stage-0 { 0% { opacity: 1; } 27% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes stage-1 { 0% { opacity: 0; } 27% { opacity: 1; } 56% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes stage-2 { 0% { opacity: 0; } 56% { opacity: 1; } 85% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes stage-3 { 0% { opacity: 0; } 85% { opacity: 1; } 98% { opacity: 0; } 100% { opacity: 0; } }
+
+@media (max-width: 760px) {
+  .hero { height: 100svh; min-height: 700px; }
+  .hero__eyebrow { display: none; }
+  .hero__scrim {
+    background: linear-gradient(180deg, rgba(10, 56, 130, 0.92) 0%, rgba(10, 56, 130, 0.85) 48%, rgba(10, 56, 130, 0) 64%);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .hero__copy { padding: calc(var(--nav-h) + 28px) 20px 0; }
+  .hero__title { font-size: 36px; }
+  .hero__fine { display: none; }
+  .hero__support { font-size: 16px; }
+  .notices { right: 12px; left: 12px; width: auto; bottom: 31%; }
+  .notice:nth-last-child(n + 2) { display: none; }
+}
+
+/* between phone and desktop the copy reaches the middle of the sky: keep that part clear */
+@media (max-width: 1200px) {
+  .drift--a, .drift--c { display: none; }
+}
