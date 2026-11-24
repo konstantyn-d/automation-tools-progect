@@ -1,0 +1,19 @@
+name: Fetch cover photo candidates
+on:
+  push:
+    branches: [cover-photos]
+    paths: ['covers/queries.json', 'covers/fetch.py']
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 covers/fetch.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add covers
+          git commit -m "Add cover photo candidates from Unsplash"
+          git push
