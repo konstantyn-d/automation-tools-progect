@@ -4,7 +4,7 @@
   min-height: 660px;
   max-height: 980px;
   overflow: hidden;
-  background: #1767c9;
+  background: #66c2e7;
   color: #fff;
   --sy: 0; /* px scrolled, set from Hero.jsx */
 }
@@ -20,12 +20,16 @@
   height: 100%;
   --px: 3px; /* one scene pixel on screen, set from HeroScene.jsx */
 }
-.hero-scene__canvas {
+.hero-scene__img {
   display: block;
   width: 100%;
   height: 100%;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+  animation: hero-zoom 1.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+/* the picture settles in once when the page opens */
+@keyframes hero-zoom {
+  from { transform: scale(1.04); opacity: 0.6; }
+  to { transform: none; opacity: 1; }
 }
 /* sun light falling through the leaves of the big tree */
 .hero-scene__rays {
@@ -113,8 +117,8 @@
 /* --- notices above the laptop: what learners are doing --- */
 .notices {
   position: absolute;
-  left: calc(var(--px) * 286);
-  bottom: calc(var(--px) * 164);
+  left: calc(var(--px) * 990);
+  bottom: calc(var(--px) * 362);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -179,9 +183,7 @@
   .hero__title { font-size: 36px; }
   .hero__fine { display: none; }
   .hero__support { font-size: 16px; }
-  .notices { left: calc(var(--px) * 262); width: 220px; }
-  .notice__meta { display: none; }
-  .notice:nth-last-child(n + 2) { display: none; }
+  .notices { display: none; }
 }
 
 /* between phone and desktop the copy reaches the laptop: leave the notices out there */

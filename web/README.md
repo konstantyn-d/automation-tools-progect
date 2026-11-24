@@ -157,4 +157,4 @@ Fonts: Inter, IBM Plex Mono and Departure Mono, all under the SIL Open Font Lice
 
 Course cover photos (`src/assets/covers/`, one file per course slug) come from
 [Unsplash](https://unsplash.com) and are used under the [Unsplash License](https://unsplash.com/license).
-The landing page scene (park, tree, laptop) is drawn in code in `src/lib/parkScene.js`.
+The landing page picture (`src/assets/hero-park.webp`) is a generated illustration supplied by the project owner.

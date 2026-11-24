@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import HeroScene from './HeroScene.jsx'
 import { PlayIcon } from '../components/icons.jsx'
-import { useMediaQuery } from '../lib/useMediaQuery.js'
 import '../styles/hero.css'
 
 const NOTICES = [
@@ -43,7 +42,6 @@ function Notices() {
 }
 
 export default function Hero({ onNav }) {
-  const compact = useMediaQuery('(max-width: 760px)')
   const ref = useRef(null)
 
   // While you scroll away, the scene moves slower than the page and the copy lifts and fades.
@@ -67,7 +65,7 @@ export default function Hero({ onNav }) {
 
   return (
     <header className="hero" id="top" ref={ref}>
-      <HeroScene compact={compact}>
+      <HeroScene>
         <Notices />
       </HeroScene>
       <div className="hero__scrim" />
