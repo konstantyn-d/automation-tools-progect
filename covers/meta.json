@@ -1,1 +1,1038 @@
-{}
+{
+ "n8n-basics": [],
+ "webhooks-from-zero": [],
+ "rest-apis-for-data-people": [],
+ "shell-scripting": [],
+ "cron-and-schedulers": [
+  {
+   "src": "openverse",
+   "id": "4467a0d6-c0d7-4fa1-ad7d-2dbfa4feda55",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/EIW9MO2ZFG.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/EIW9MO2ZFG.jpg",
+   "author": "Jiyeon Park",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/vintage-clock-EIW9MO2ZFG",
+   "title": "Vintage Clock",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "17e09401-737f-4b56-af59-c5b7c1d3868c",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/MWBK0MYYGL.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/MWBK0MYYGL.jpg",
+   "author": "Ghost Presenter",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/vintage-clock-MWBK0MYYGL",
+   "title": "Vintage Clock",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "23477e79-3ba8-4c92-b3f7-8dcdd27b49f8",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4ODEyNDE2LWltYWdlLWt3dnYwOHA2LmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4ODEyNDE2LWltYWdlLWt3dnYwOHA2LmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5905636/photo-image-background-public-domain-vintage",
+   "title": "Free vintage clock image",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "3653c9dd-617e-468a-bc01-3553e8d84609",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3N2MTkwNzY4LWltYWdlLWt3dnVnYnd1LmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3N2MTkwNzY4LWltYWdlLWt3dnVnYnd1LmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5901843/photo-image-background-public-domain-vintage",
+   "title": "Free vintage clock image",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "ebbbb05f-e088-401b-a6c9-0096e18b27a0",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3NrMTQzMC1pbWFnZS1rd3Z1bjhvcS5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3NrMTQzMC1pbWFnZS1rd3Z1bjhvcS5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5903183/photo-image-background-public-domain-vintage",
+   "title": "Free white vintage clock image",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "8c65501c-a4ca-40bf-bcc1-d7bc3029c3f6",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA3L2pvYjk0OS0xODguanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA3L2pvYjk0OS0xODguanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/7574698/vector-vintage-golden-public-domain",
+   "title": "Vintage clock collage element illustration",
+   "i": 5
+  }
+ ],
+ "ai-agents-with-n8n": [],
+ "n8n-error-handling": [
+  {
+   "src": "openverse",
+   "id": "0695d8f4-7bce-4b88-a384-df9f9bab70bb",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Red_squirrels_warning_signs%2C_Lake_District.jpg",
+   "raw": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Red_squirrels_warning_signs%2C_Lake_District.jpg",
+   "author": "Edward Simpson from London, England",
+   "license": "by-sa 2.0",
+   "link": "https://commons.wikimedia.org/w/index.php?curid=20853544",
+   "title": "Red squirrels warning signs, Lake District",
+   "i": 3
+  }
+ ],
+ "self-hosting-n8n-with-docker": [
+  {
+   "src": "openverse",
+   "id": "956b7f6b-3c9b-4ea4-8da6-a6fd529c8194",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA3L3Vwd2s2MjI2OTY3Ni13aWtpbWVkaWEtaW1hZ2UuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA3L3Vwd2s2MjI2OTY3Ni13aWtpbWVkaWEtaW1hZ2UuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3305642/free-photo-image-shipping-cargo-transportation-containers",
+   "title": "Stacks shipping containers Port Barcelona",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "a76c548f-b728-4e80-9215-fd2e1ee5ba47",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyY29udGFpbmVyX2xpZnRlcl9jb250YWluZXJfcG9ydC1pbWFnZS1reWJidGJmNy5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyY29udGFpbmVyX2xpZnRlcl9jb250YWluZXJfcG9ydC1pbWFnZS1reWJidGJmNy5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/6026504/photo-image-public-domain-free",
+   "title": "Shipping containers port",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "951ae93f-b13b-425a-bf94-0b8ccb476e2f",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA5L2xvYzIwMjA3MjEwODYtaW1hZ2UuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA5L2xvYzIwMjA3MjEwODYtaW1hZ2UuanBn.jpg",
+   "author": "Carol M Highsmith",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/8069979/photo-image-public-domain-united-states",
+   "title": "Aerial view shipping-container port Miami",
+   "i": 2
+  }
+ ],
+ "sub-workflows-and-reuse": [],
+ "the-code-node-for-non-programmers": [
+  {
+   "src": "openverse",
+   "id": "59a4592c-6981-4e21-abcb-2c1e9d4ba536",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3Vwd2s2MjI5NzcyMS13aWtpbWVkaWEtaW1hZ2Uta293bXNlbDkuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3Vwd2s2MjI5NzcyMS13aWtpbWVkaWEtaW1hZ2Uta293bXNlbDkuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3295877/free-photo-image-language-learning-code-technology-background-digital",
+   "title": "Close-up colorful lines code computer",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "6c11b66a-8bd7-47d2-8bf8-bd67bb5af75e",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3Vwd2s2MTgwNzIxOC13aWtpbWVkaWEtaW1hZ2Uta293cTBzdm8uanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3Vwd2s2MTgwNzIxOC13aWtpbWVkaWEtaW1hZ2Uta293cTBzdm8uanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3301681/free-photo-image-data-coding-computer-business",
+   "title": "Colorful lines code computer screen",
+   "i": 4
+  }
+ ],
+ "forms-and-approvals-in-n8n": [
+  {
+   "src": "openverse",
+   "id": "b3be6880-561e-4926-bc94-de401f44d115",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/UP9J4EZYNJ.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/UP9J4EZYNJ.jpg",
+   "author": "Ch%E2u%20Th%F4ng%20Phan",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/office-work-UP9J4EZYNJ",
+   "title": "Office Work",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "9214cfff-6f54-4f68-beba-8269096473dc",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5NDE0NjMtaW1hZ2Uta3d5bnk0NnAuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5NDE0NjMtaW1hZ2Uta3d5bnk0NnAuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5940901/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "e5c54964-bc90-48d5-9efe-40ecddbf6f53",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4ODU0ODk5LWltYWdlLWt3dnV4MTFoLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4ODU0ODk5LWltYWdlLWt3dnV4MTFoLmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5904897/photo-image-public-domain-hand-person",
+   "title": "Man signing contract",
+   "i": 3
+  }
+ ],
+ "n8n-for-teams": [
+  {
+   "src": "openverse",
+   "id": "be224b0f-9817-49e7-8402-8198f7f4e126",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/JBW2PXDOL6.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/JBW2PXDOL6.jpg",
+   "author": "Startup Stock Photos",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/team-meeting-JBW2PXDOL6",
+   "title": "Team Meeting",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "60d07cfc-45e4-4416-9737-4a446f33bec0",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/VQXYE2ZEHC.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/VQXYE2ZEHC.jpg",
+   "author": "Startup Stock Photos",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/team-meeting-VQXYE2ZEHC",
+   "title": "Team Meeting",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "99aae217-9652-497a-8a24-f9d05b459cae",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/69TMH4ITIE.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/69TMH4ITIE.jpg",
+   "author": "Startup Stock Photos",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/team-meeting-69TMH4ITIE",
+   "title": "Team Meeting",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "b73d6a7e-37f4-4f5e-9468-5ac1d0ef30fe",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/Y01VDYAX63.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/Y01VDYAX63.jpg",
+   "author": "Helloquence",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/writing-papers-Y01VDYAX63",
+   "title": "Writing Papers",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "0d52356f-cf5d-412b-b96d-6077720a6656",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/Q1OSKR7D42.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/Q1OSKR7D42.jpg",
+   "author": "Startup Stock Photos",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/business-team-Q1OSKR7D42",
+   "title": "Business Team",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "d97e525c-3e27-45a1-a9c6-ae96a968b1d0",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/2R1OMUFVO5.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/2R1OMUFVO5.jpg",
+   "author": "Startup Stock Photos",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/team-meeting-2R1OMUFVO5",
+   "title": "Team Meeting",
+   "i": 5
+  }
+ ],
+ "files-pdfs-and-images-in-n8n": [
+  {
+   "src": "openverse",
+   "id": "91afbe23-6a71-4091-9ee8-af6c0468aca3",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4OTgyMTg2LWltYWdlLWt3dnVxY3hnLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4OTgyMTg2LWltYWdlLWt3dnVxY3hnLmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5903674/photo-image-paper-public-domain-black",
+   "title": "Free newspaper stacks image",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "e906903e-5b2b-48ef-9810-1ad2260cf951",
+   "url": "https://images.rawpixel.com/image_png_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvam9iNjgxLTAwODgtcC1sMWxnZjU1aS5wbmc.png",
+   "raw": "https://images.rawpixel.com/image_png_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvam9iNjgxLTAwODgtcC1sMWxnZjU1aS5wbmc.png",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/6338441/png-paper-sticker",
+   "title": "PNG stack papers sticker stationery",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "4906d840-2a9a-4a51-b31a-f34b4d68d8c4",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3B4NTM2MjEyLWltYWdlLWt3dnhua241LmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3B4NTM2MjEyLWltYWdlLWt3dnhua241LmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5922472/photo-image-paper-texture-public-domain",
+   "title": "Free stacks paper files image",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "0e4a84f7-23b5-49f7-845c-1159eb2573e8",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4NTM2Njc2LWltYWdlLWt3dnZlcm44LmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4NTM2Njc2LWltYWdlLWt3dnZlcm44LmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5908233/image-paper-book-public-domain",
+   "title": "Free stack spiral notebook image",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "fa389924-c8fd-4d94-933a-22d63fbbdaf1",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHgxMzM0NTc5LWltYWdlLWt3eXFubGRwLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHgxMzM0NTc5LWltYWdlLWt3eXFubGRwLmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5958436/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 5
+  }
+ ],
+ "loops-and-big-data-sets": [],
+ "oauth2-explained-with-drawings": [
+  {
+   "src": "openverse",
+   "id": "deb7b5c9-590d-41e2-9b6c-7c7196d45f7d",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/Z1TKDI29FZ.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/Z1TKDI29FZ.jpg",
+   "author": "WDnet Studio",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/keys-door-Z1TKDI29FZ",
+   "title": "Keys Door",
+   "i": 2
+  }
+ ],
+ "graphql-for-automators": [],
+ "building-your-own-small-api": [],
+ "online-payments-with-stripe-and-mollie": [
+  {
+   "src": "openverse",
+   "id": "f68c1e77-cb68-42f3-b7a9-a8f55522dbbf",
+   "url": "https://images.rawpixel.com/image_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L2ZsNDMzNTI5NTU5MDEtcHVibGljLWltYWdlLWtvbnE2bTZkLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/image_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L2ZsNDMzNTI5NTU5MDEtcHVibGljLWltYWdlLWtvbnE2bTZkLmpwZw.jpg",
+   "author": "U.S. Department of Agriculture",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3259395/free-photo-image-credit-card-machine-shopping",
+   "title": "Cranberry Isles Fishermen\u2019s Co-op Bookkeeper",
+   "i": 4
+  }
+ ],
+ "google-workspace-apis": [],
+ "microsoft-365-and-graph": [],
+ "slack-and-discord-bots": [],
+ "testing-apis-with-postman-and-curl": [
+  {
+   "src": "openverse",
+   "id": "3d36b195-7817-435b-885b-2ec4f215ee37",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3drMzI5MzAxMzYtaW1hZ2Uta3A2Y211ZWYuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3drMzI5MzAxMzYtaW1hZ2Uta3A2Y211ZWYuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3338342/free-photo-image-blood-collection-tube-cc0-creative-commons",
+   "title": "Lab tube",
+   "i": 5
+  }
+ ],
+ "prompt-writing-for-workflows": [
+  {
+   "src": "openverse",
+   "id": "f160f173-d27e-44c0-9b78-3518b1268c7b",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/9VJVUAGUHA.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/9VJVUAGUHA.jpg",
+   "author": "Luca Bravo",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/typewriter-writing-9VJVUAGUHA",
+   "title": "Typewriter Writing",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "7f0bb3bc-1f0e-4bc7-91ae-ce4c39d3fb4a",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/J8HP1PXSEJ.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/J8HP1PXSEJ.jpg",
+   "author": "Nirzar Pangarkar",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/typewriter-writing-J8HP1PXSEJ",
+   "title": "Typewriter Writing",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "c6ab46dd-43a4-4427-895e-c471c6a3d8b2",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/UN5XQREKKP.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/UN5XQREKKP.jpg",
+   "author": "Burst",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/man-working-UN5XQREKKP",
+   "title": "Man Working",
+   "i": 4
+  }
+ ],
+ "document-extraction-with-ai": [],
+ "let-ai-answer-from-your-documents": [],
+ "running-models-locally-with-ollama": [
+  {
+   "src": "openverse",
+   "id": "5f417ad3-27e1-4b95-89ca-5942ce862aa6",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL2ZsNDUxMTU5MTU1NjUtaW1hZ2UuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL2ZsNDUxMTU5MTU1NjUtaW1hZ2UuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/11189110/electronic-chip-circuit-hardware",
+   "title": "Electronic chip, circuit hardware",
+   "i": 0
+  }
+ ],
+ "speech-transcripts-and-subtitles": [
+  {
+   "src": "openverse",
+   "id": "2ac1699a-a665-4497-997c-b506ae076ebf",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/IQVHQYS3GL.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/IQVHQYS3GL.jpg",
+   "author": "Maciej Korsan",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/microphone-audio-IQVHQYS3GL",
+   "title": "Microphone Audio",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "d4683816-9bac-4355-918d-803f378c5b7f",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/8KQC04JDT0.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/8KQC04JDT0.jpg",
+   "author": "Freestocks.org",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/microphone-music-8KQC04JDT0",
+   "title": "Microphone Music",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "48f0be79-14a1-4af3-96af-465802feca31",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/H3V72OR6KN.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/H3V72OR6KN.jpg",
+   "author": "Kai%20Oberh%E4user",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/microphone-audio-H3V72OR6KN",
+   "title": "Microphone Audio",
+   "i": 3
+  }
+ ],
+ "evaluating-ai-output": [],
+ "ai-for-support-teams": [],
+ "from-excel-to-a-real-database": [
+  {
+   "src": "openverse",
+   "id": "7d2ed772-9e4d-4582-9297-6c2d6ac94d06",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MTI0MTMyNS1pbWFnZS1rd3Z3NGFoMC5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MTI0MTMyNS1pbWFnZS1rd3Z3NGFoMC5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5912401/image-public-domain-black-technology",
+   "title": "Free computer server room image",
+   "i": 5
+  }
+ ],
+ "cleaning-messy-data": [],
+ "sql-for-automators": [],
+ "postgres-in-practice": [
+  {
+   "src": "openverse",
+   "id": "e4bf869e-7ae1-493b-b623-a0a5a42d9ddf",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Virginia_Tech_-_data_center.jpg",
+   "raw": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Virginia_Tech_-_data_center.jpg",
+   "author": "Christopher Bowns",
+   "license": "by-sa 2.0",
+   "link": "https://commons.wikimedia.org/w/index.php?curid=110874437",
+   "title": "Virginia Tech - data center",
+   "i": 5
+  }
+ ],
+ "reports-that-build-themselves": [
+  {
+   "src": "openverse",
+   "id": "bb7d1cde-8ca3-45fd-a9c4-2585174aba3e",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/LABXT2BYKU.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/LABXT2BYKU.jpg",
+   "author": "Wilfred Iven",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/business-reports-LABXT2BYKU",
+   "title": "Business Reports",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "4f6c524a-c9bf-4d09-8e4b-e6a311d2a9d7",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/WBCW2XFGD2.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/WBCW2XFGD2.jpg",
+   "author": "Wilfred Iven",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/mobile-smartphone-WBCW2XFGD2",
+   "title": "Mobile Smartphone",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "cb90eda0-7a25-4bc5-9d94-4da103b8c0a2",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/7ZZ1MMGRK4.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/7ZZ1MMGRK4.jpg",
+   "author": "Wilfred Iven",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/mobile-smartphone-7ZZ1MMGRK4",
+   "title": "Mobile Smartphone",
+   "i": 2
+  }
+ ],
+ "csv-files-without-pain": [],
+ "dashboards-with-metabase": [],
+ "data-privacy-for-automators": [
+  {
+   "src": "openverse",
+   "id": "ad39e2af-414e-4769-b71c-b96850189b01",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvYTAxMC1tYXJrdXNzcGlza2UtZmViMTktbXNwXzE5MDFfNDQ5Ni5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvYTAxMC1tYXJrdXNzcGlza2UtZmViMTktbXNwXzE5MDFfNDQ5Ni5qcGc.jpg",
+   "author": "Markus Spiske",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/593199/chained-locks",
+   "title": "Gold padlocks metal fence",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "f2e0c20b-2fec-49a9-9590-e1c43f1431dc",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MzY4NDMtaW1hZ2Uta3d5bnpzb3YuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MzY4NDMtaW1hZ2Uta3d5bnpzb3YuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5941177/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "1ca762f4-235b-4c13-841e-1915fa399f96",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MDkyNDAtaW1hZ2Uta3d5bzRwZ20uanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MDkyNDAtaW1hZ2Uta3d5bzRwZ20uanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5942055/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "bfc0fd0f-98a8-43d8-a738-1939247c75ea",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MzY4NDQtaW1hZ2Uta3d5bzBpd3EuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MzY4NDQtaW1hZ2Uta3d5bzBpd3EuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5941408/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "76522fe3-2b55-4e2a-8084-3552e2860507",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg1Nzk1MjAtaW1hZ2Uta3d5cDRzeGouanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg1Nzk1MjAtaW1hZ2Uta3d5cDRzeGouanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5949118/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 4
+  }
+ ],
+ "python-for-automation": [],
+ "regular-expressions": [
+  {
+   "src": "openverse",
+   "id": "fab8e394-8c62-463f-a596-25a869bb2eb0",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3B4OTQ0NTY5LWltYWdlLWt3dnhldzNhLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3B4OTQ0NTY5LWltYWdlLWt3dnhldzNhLmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5920980/photo-image-public-domain-art-wood",
+   "title": "Free letters typography wood image",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "858774ca-fd5e-4368-aa97-48ff7420586c",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/BLRAORQYEP.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/BLRAORQYEP.jpg",
+   "author": "Words as Pictures",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/word-letters-BLRAORQYEP",
+   "title": "Word Letters",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "c99264c9-e079-4701-9248-b1713e63ea02",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/IOZA6RLQG4.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/IOZA6RLQG4.jpg",
+   "author": "Ylanite Koppens",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/love-letter-IOZA6RLQG4",
+   "title": "Love Letter",
+   "i": 5
+  }
+ ],
+ "git-for-people-who-are-not-developers": [
+  {
+   "src": "openverse",
+   "id": "da92b9f5-917c-483f-ac46-5e203db0cf40",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/EN7AWY4OEB.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/EN7AWY4OEB.jpg",
+   "author": "Aaron Burden",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/trees-branches-EN7AWY4OEB",
+   "title": "Trees Branches",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "8afe39e3-e407-4cef-b549-37823feebd28",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/SB8N9X4ZON.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/SB8N9X4ZON.jpg",
+   "author": "LoboStudio Hamburg",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/trees-branches-SB8N9X4ZON",
+   "title": "Trees Branches",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "df20ffb3-48c2-4679-958a-778d1375ad11",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/IF5KLYRPJT.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/IF5KLYRPJT.jpg",
+   "author": "Redd Angelo",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/trees-branches-IF5KLYRPJT",
+   "title": "Trees Branches",
+   "i": 4
+  }
+ ],
+ "powershell-for-windows-admins": [
+  {
+   "src": "openverse",
+   "id": "b589f609-5437-40e3-b43b-006dd5c6cf14",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/UATQGKPFOH.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/UATQGKPFOH.jpg",
+   "author": "Design by Matt",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/keyboard-typing-UATQGKPFOH",
+   "title": "Keyboard Typing",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "19899a17-aa80-4950-bf2b-42483446a449",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/R1BROKK78W.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/R1BROKK78W.jpg",
+   "author": "John Tekeridis",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/laptop-keyboard-R1BROKK78W",
+   "title": "Laptop Keyboard",
+   "i": 3
+  }
+ ],
+ "jq-json-on-the-command-line": [],
+ "node-js-scripts": [
+  {
+   "src": "openverse",
+   "id": "3541958d-e1a9-47f4-ba44-93d96dc17d01",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvaXM4NDQ1LWltYWdlLWt3eXM3Mjk4LmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvaXM4NDQ1LWltYWdlLWt3eXM3Mjk4LmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5968870/javascript-code",
+   "title": "JavaScript Code",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "12c32714-5bf4-4137-a96b-38763e272e92",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL25zMzc4Ny1pbWFnZS1rd3Z3cGR6MC5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL25zMzc4Ny1pbWFnZS1rd3Z3cGR6MC5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5916258/image-public-domain-art-free",
+   "title": "Free HTML header JavaScript code",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "e6da4b88-9859-4bf0-9169-3f359f4c3cbf",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/BKWZJHXR57.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/BKWZJHXR57.jpg",
+   "author": "Markus Spiske",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/code-coding-BKWZJHXR57",
+   "title": "Code Coding",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "f4a0cabe-4e2d-4018-8700-9bd267beaa73",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/1STVFMTBJY.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/1STVFMTBJY.jpg",
+   "author": "One Idea LLC",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/programming-code-1STVFMTBJY",
+   "title": "Programming Code",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "5382ac28-986c-4e3c-89c1-85f8d6f640de",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Programming_code.jpg",
+   "raw": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Programming_code.jpg",
+   "author": "Martin Vorel",
+   "license": "by-sa 4.0",
+   "link": "https://commons.wikimedia.org/w/index.php?curid=113444223",
+   "title": "Programming code",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "cfb49a30-f711-4077-b92f-14646c956e29",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/NT1Q3GZVFI.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/NT1Q3GZVFI.jpg",
+   "author": "Christina Morillo",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/developer-code-NT1Q3GZVFI",
+   "title": "Developer Code",
+   "i": 5
+  }
+ ],
+ "docker-for-automators": [],
+ "monitoring-your-automations": [],
+ "backups-you-can-restore": [],
+ "secrets-and-credentials": [
+  {
+   "src": "openverse",
+   "id": "3524ba4c-d52f-4d81-9fa9-66ad8aefac35",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/60C35E7502.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/60C35E7502.jpg",
+   "author": "Leeroy",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/safe-vault-60C35E7502",
+   "title": "Safe Vault",
+   "i": 0
+  }
+ ],
+ "idempotency-and-retries": [],
+ "queues-and-events": [],
+ "from-zapier-and-make-to-n8n": [
+  {
+   "src": "openverse",
+   "id": "22e1775d-7a10-42dc-860a-4d92270f1f00",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/8/82/An_Overview_of_Moving_Companies_and_Their_Use_of_Moving_Boxes.jpg",
+   "raw": "https://upload.wikimedia.org/wikipedia/commons/8/82/An_Overview_of_Moving_Companies_and_Their_Use_of_Moving_Boxes.jpg",
+   "author": "brownpau",
+   "license": "by 2.0",
+   "link": "https://commons.wikimedia.org/w/index.php?curid=50576123",
+   "title": "An Overview of Moving Companies and Their Use of Moving Boxes",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "c3bc7c15-201c-400f-a1ad-17e6e14c51bb",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAzL2ZsNTI2MjA0NDU0MjUtaW1hZ2UuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAzL2ZsNTI2MjA0NDU0MjUtaW1hZ2UuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/11073059/photo-image-face-person-public-domain",
+   "title": "Returns Warehouse Forklift moving boxes",
+   "i": 2
+  }
+ ],
+ "automating-invoices": [],
+ "bank-statements-and-payment-matching": [
+  {
+   "src": "openverse",
+   "id": "44208cc2-c684-4310-aa4a-8f5fc4a0381e",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDE2NjkxNTQ0OC1pbWFnZS1reWJlZGZjNy5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDE2NjkxNTQ0OC1pbWFnZS1reWJlZGZjNy5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/6041840/photo-image-public-domain-money-free",
+   "title": "Bank statement, money & banking",
+   "i": 0
+  }
+ ],
+ "crm-automation-with-hubspot": [],
+ "e-mail-people-do-not-hate": [],
+ "newsletters-with-clean-lists": [
+  {
+   "src": "openverse",
+   "id": "ef24afb9-3e53-4321-8619-69b53226db0e",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/OJXHDWMWV9.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/OJXHDWMWV9.jpg",
+   "author": "Wilfred Iven",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/news-newspaper-OJXHDWMWV9",
+   "title": "News Newspaper",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "041c9535-72ec-4d18-828a-ea6b0c6871f8",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvLWEwMTAtbWFya3Vzcy0wNDEyLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvLWEwMTAtbWFya3Vzcy0wNDEyLmpwZw.jpg",
+   "author": "Markus Spiske",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/432150/free-photo-image-news-newspaper-smartphone",
+   "title": "Cup coffee newspaper",
+   "i": 5
+  }
+ ],
+ "onboarding-new-employees": [],
+ "e-commerce-order-flows": [
+  {
+   "src": "openverse",
+   "id": "cc958b97-3c01-4a76-8f14-aa679f309b0e",
+   "url": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDIzMTUxOTIyNy1wdWJsaWMtaW1hZ2Uta29udW91bnEuanBn.jpg",
+   "raw": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDIzMTUxOTIyNy1wdWJsaWMtaW1hZ2Uta29udW91bnEuanBn.jpg",
+   "author": "U.S. Department of Agriculture",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3261715/free-photo-image-cardboard-box-parcel-delivery",
+   "title": "Food boxes enter the more",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "3d11dc37-f018-4747-b9a3-f75572e69929",
+   "url": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDIzMDY1NTY3My1wdWJsaWMtaW1hZ2Uta293c2lqdXouanBn.jpg",
+   "raw": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDIzMDY1NTY3My1wdWJsaWMtaW1hZ2Uta293c2lqdXouanBn.jpg",
+   "author": "U.S. Department of Agriculture",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3306808/free-photo-image-delivery-package",
+   "title": "UPS employee Jocelin Zuniga unloads",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "f9277e79-c211-4fe2-a8ec-0b0448bd2bd2",
+   "url": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDIzMDY1NDIwMy1wdWJsaWMtaW1hZ2Uta29udW9ydzIuanBn.jpg",
+   "raw": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw1MDIzMDY1NDIwMy1wdWJsaWMtaW1hZ2Uta29udW9ydzIuanBn.jpg",
+   "author": "U.S. Department of Agriculture",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3261721/free-photo-image-cardboard-boxes-parcel-box",
+   "title": "Food boxes enter the more",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "bb15581a-68b6-4c68-a269-277271281ba3",
+   "url": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw0NjEwNDU5NDI2MS1wdWJsaWMtaW1hZ2Uta293c2E1MHYuanBn.jpg",
+   "raw": "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw0NjEwNDU5NDI2MS1wdWJsaWMtaW1hZ2Uta293c2E1MHYuanBn.jpg",
+   "author": "U.S. Department of Agriculture",
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3306173/free-photo-image-logistics-box-cardboard",
+   "title": "U.S. Department of Agriculture (USDA)",
+   "i": 5
+  }
+ ],
+ "approval-flows-for-finance": [
+  {
+   "src": "openverse",
+   "id": "6f2d4ea0-1752-4d62-85e0-5c6c619b7d47",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/UNB7V2H5L4.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/UNB7V2H5L4.jpg",
+   "author": "Negative Space",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/macbook-laptop-UNB7V2H5L4",
+   "title": "Macbook Laptop",
+   "i": 0
+  },
+  {
+   "src": "openverse",
+   "id": "9b7ef946-1e8c-4654-bd90-ee183d6056a3",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/JONMP7TPGK.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/JONMP7TPGK.jpg",
+   "author": "Wilfred Iven",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/accounting-finance-JONMP7TPGK",
+   "title": "Accounting Finance",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "1a11f465-1a0d-4f20-ab35-5beac297bc8e",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/Y2GUBQIPXD.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/Y2GUBQIPXD.jpg",
+   "author": "Negative Space",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/calculator-numbers-Y2GUBQIPXD",
+   "title": "Calculator Numbers",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "3ae4dcca-6208-48ff-86eb-eab5f8277ddd",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/JY874BSKKC.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/JY874BSKKC.jpg",
+   "author": "Martin Vorel",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/calculator-numbers-JY874BSKKC",
+   "title": "Calculator Numbers",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "d5499ada-5c48-4eff-979d-e1a3e070b6e9",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/GIDMT5TDUF.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/GIDMT5TDUF.jpg",
+   "author": "Negative Space",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/calculator-numbers-GIDMT5TDUF",
+   "title": "Calculator Numbers",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "a5ec16c6-17e7-4835-afe0-2333ab7cd178",
+   "url": "https://cdn.stocksnap.io/img-thumbs/960w/VVXW9WBTB8.jpg",
+   "raw": "https://cdn.stocksnap.io/img-thumbs/960w/VVXW9WBTB8.jpg",
+   "author": "Martin Vorel",
+   "license": "cc0 1.0",
+   "link": "https://stocksnap.io/photo/calculator-numbers-VVXW9WBTB8",
+   "title": "Calculator Numbers",
+   "i": 5
+  }
+ ],
+ "calendar-and-booking-automation": [
+  {
+   "src": "openverse",
+   "id": "9e1c36d7-be7f-4b01-a87b-a202907b4b31",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdXB3azYyMDQ3Nzc3LXdpa2ltZWRpYS1pbWFnZS1rb3dvajJnbS5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdXB3azYyMDQ3Nzc3LXdpa2ltZWRpYS1pbWFnZS1rb3dvajJnbS5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/3299160/free-photo-image-calendar-time-plan",
+   "title": "open calendar short notes scribbled",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "cb16d823-f3ac-49db-aac7-19e98e02d561",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MTIwNzgwNS1pbWFnZS1rd3Z3NWt0dS5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MTIwNzgwNS1pbWFnZS1rd3Z3NWt0dS5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5912649/image-paper-book-public-domain",
+   "title": "Free open calendar pen photo",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "08421142-7171-4569-ad38-7049f9f65d95",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg4MTQ0NTQtaW1hZ2Uta3d5b2R3czQuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg4MTQ0NTQtaW1hZ2Uta3d5b2R3czQuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5943881/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "9fa2917b-e947-4217-846e-9858cc6eb5ca",
+   "url": "https://lh3.googleusercontent.com/3dPN9nKRV810MlVXMj41yPlnBr_D9sSNbu_gNr4Zg-vrFrYejUkoA5zpP9AArWRDw2xgnH4VlVcYGGBEsknlxXfWDudK=s0",
+   "raw": "https://lh3.googleusercontent.com/3dPN9nKRV810MlVXMj41yPlnBr_D9sSNbu_gNr4Zg-vrFrYejUkoA5zpP9AArWRDw2xgnH4VlVcYGGBEsknlxXfWDudK=s0",
+   "author": "anonymous",
+   "license": "cc0 1.0",
+   "link": "https://www.rijksmuseum.nl/en/collection/RP-F-F00828-2",
+   "title": "Blad 2 uit Stamboek van de leerlingen der Koloniale School voor Meisjes en Vrouwen te 's-Gravenhage deel I (1921-1929), anonymous, 1921",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "ad93b1c2-4633-4e53-ba7d-f27cc79628d3",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MTMwMTgtaW1hZ2Uta3d5bzNlZ24uanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg5MTMwMTgtaW1hZ2Uta3d5bzNlZ24uanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5941977/free-public-domain-cc0-photo",
+   "title": null,
+   "i": 5
+  }
+ ],
+ "social-media-scheduling": [
+  {
+   "src": "openverse",
+   "id": "d8385abc-83b3-45a0-b515-11786b6cc66d",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHgxMjQwODQ4LWltYWdlLWt6MmUyNXJhLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHgxMjQwODQ4LWltYWdlLWt6MmUyNXJhLmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/6112103/photo-image-instagram-phone-public-domain",
+   "title": "Social media applications mobile screen",
+   "i": 1
+  },
+  {
+   "src": "openverse",
+   "id": "c88008a7-fbe2-43b2-ab5a-0e1d64e5f2c1",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MTAyODUxOS1pbWFnZS1rejJlOHowZC5qcGc.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MTAyODUxOS1pbWFnZS1rejJlOHowZC5qcGc.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/6113522/photo-image-phone-public-domain-logo",
+   "title": "Social media applications mobile screen",
+   "i": 2
+  },
+  {
+   "src": "openverse",
+   "id": "47826ff1-1222-4b34-b513-e591cd5245dc",
+   "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg2OTg5MjQtaW1hZ2Uta3d2eGg5NjkuanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg2OTg5MjQtaW1hZ2Uta3d2eGg5NjkuanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/5921379/photo-image-public-domain-student-woman",
+   "title": "Free woman using social media",
+   "i": 3
+  },
+  {
+   "src": "openverse",
+   "id": "5819694b-66ef-4e7d-9928-deff43132b2d",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2lzMTY4NDUtaW1hZ2Uta3oyZHh2Z24uanBn.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2lzMTY4NDUtaW1hZ2Uta3oyZHh2Z24uanBn.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/6111435/photo-image-phone-public-domain-logo",
+   "title": "Facebook logo phone screen, location",
+   "i": 4
+  },
+  {
+   "src": "openverse",
+   "id": "8b5f9d78-ef7b-46b0-b887-d187bdad0f14",
+   "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4OTUyMTQyLWltYWdlLWt6MmUzY3NmLmpwZw.jpg",
+   "raw": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4OTUyMTQyLWltYWdlLWt6MmUzY3NmLmpwZw.jpg",
+   "author": null,
+   "license": "cc0 1.0",
+   "link": "https://www.rawpixel.com/image/6112294/photo-image-phone-public-domain-logo",
+   "title": "Facebook log page phone screen",
+   "i": 5
+  }
+ ],
+ "_hero": []
+}
