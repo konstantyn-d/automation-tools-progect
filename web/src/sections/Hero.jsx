@@ -12,7 +12,7 @@ const NOTICES = [
   { tone: 'blue', text: 'New lesson out', meta: 'every Tuesday' },
 ]
 
-// Small notices above the machine: what learners are doing. A new one pops in every 2.2 seconds,
+// Small notices above the laptop: what learners are doing. A new one pops in every 2.2 seconds,
 // the three most recent stay visible.
 function Notices() {
   const [count, setCount] = useState(1)
@@ -67,7 +67,9 @@ export default function Hero({ onNav }) {
 
   return (
     <header className="hero" id="top" ref={ref}>
-      <HeroScene compact={compact} />
+      <HeroScene compact={compact}>
+        <Notices />
+      </HeroScene>
       <div className="hero__scrim" />
       <div className="hero__copy">
         <p className="hero__eyebrow">Video courses on automation · Ghent, since 2019</p>
@@ -86,7 +88,6 @@ export default function Hero({ onNav }) {
         </div>
         <p className="hero__fine">60 courses · two new lessons every week · from €15 a month</p>
       </div>
-      <Notices />
     </header>
   )
 }
