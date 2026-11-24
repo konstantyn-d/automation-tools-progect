@@ -1,0 +1,7 @@
+node_modules
+.env
+.env.local
+*.log
+# the LoopCasts dataset and the cleaned CSV files: personal data, never in git
+data/
+*.zip

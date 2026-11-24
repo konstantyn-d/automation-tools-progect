@@ -1,0 +1,98 @@
+{
+  "id": "LcErrorHandler01",
+  "name": "0. Error handler: log and tell the team",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "When a workflow fails",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ],
+      "id": "lc-when-a-workflow-fails"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO automation_errors (workflow, node, message, execution_id, execution_url)\nVALUES ($1, $2, $3, $4, $5)\nRETURNING id;",
+        "options": {
+          "queryReplacement": "={{ [ $json.workflow.name, $json.execution.lastNodeExecuted ?? $json.execution.error?.node?.name ?? null, $json.execution.error?.message ?? 'Unknown error', $json.execution.id ?? null, $json.execution.url ?? null ] }}"
+        }
+      },
+      "name": "Log the error",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        220,
+        300
+      ],
+      "id": "lc-log-the-error",
+      "credentials": {
+        "postgres": {
+          "id": "LcPostgresDb0001",
+          "name": "LoopCasts database"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "LoopCasts automation <automation@loopcasts.example>",
+        "toEmail": "team@loopcasts.example",
+        "subject": "=Automation failed: {{ $('When a workflow fails').first().json.workflow.name }}",
+        "emailFormat": "html",
+        "html": "={{ `<p>The workflow <b>${$('When a workflow fails').first().json.workflow.name}</b> stopped at step <b>${$('When a workflow fails').first().json.execution.lastNodeExecuted ?? '?'}</b>.</p><p>Error: ${$('When a workflow fails').first().json.execution.error?.message ?? 'unknown'}</p><p>Open the run: <a href=\"${$('When a workflow fails').first().json.execution.url}\">${$('When a workflow fails').first().json.execution.url}</a></p><p>Nothing is lost: the order data is in the run, and you can retry it from there.</p>` }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Tell the team",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        300
+      ],
+      "id": "lc-tell-the-team",
+      "credentials": {
+        "smtp": {
+          "id": "LcMailpitSmtp001",
+          "name": "LoopCasts mail (Mailpit)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When a workflow fails": {
+      "main": [
+        [
+          {
+            "node": "Log the error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log the error": {
+      "main": [
+        [
+          {
+            "node": "Tell the team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Brussels"
+  },
+  "pinData": {},
+  "tags": []
+}

@@ -1,0 +1,130 @@
+{
+  "id": "LcDemoBankFile01",
+  "name": "9. Demo: fake KBC bank export",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "demo-bank-export",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "name": "Ask for a demo bank file",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        300
+      ],
+      "id": "lc-ask-for-a-demo-bank-file",
+      "webhookId": "loopcasts-demo-bank-export"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, number, customer_name, total, ogm\nFROM invoices\nWHERE status = 'open' AND kind = 'invoice' AND NOT legacy\nORDER BY id DESC\nLIMIT 6;",
+        "options": {}
+      },
+      "name": "Load the newest open invoices",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        220,
+        300
+      ],
+      "id": "lc-load-the-newest-open-invoices",
+      "credentials": {
+        "postgres": {
+          "id": "LcPostgresDb0001",
+          "name": "LoopCasts database"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO ONLY: LoopCasts has no real bank connection in this project, so this makes the file the\n// bank would give us: today's incoming payments for the newest open invoices, in KBC's CSV format.\n//   newest invoice:  paid with the structured reference (the normal case)\n//   second newest:   reference forgotten, invoice number typed in the message\n//   third newest:    paid 20 euro too little\n// plus one outgoing payment and one payment that is not for an invoice at all.\nconst invoices = $input.all().map((i) => i.json).filter((i) => i.id);\nconst now = new Date();\nconst p = (n) => String(n).padStart(2, '0');\nconst today = `${p(now.getDate())}/${p(now.getMonth() + 1)}/${now.getFullYear()}`;\nconst money = (n) => n.toFixed(2).replace('.', ',');\nlet balance = 24850.12;\nconst rows = ['Rekeningnummer;Datum;Bedrag;Munt;Naam tegenpartij;Rekening tegenpartij;Vrije mededeling;Saldo'];\nconst add = (amount, name, iban, message) => {\n  balance = Math.round((balance + amount) * 100) / 100;\n  rows.push(['BE68 5390 0754 7034', today, money(amount), 'EUR', name, iban, message, money(balance)].join(';'));\n};\nconst iban = (id) => `BE${String(10 + (id % 89)).padStart(2, '0')}${String(id * 7919).padStart(12, '0').slice(-12)}`;\n\nadd(-75, 'VIMEO.COM', 'BE11846073157418', 'Vimeo Pro yearly');\ninvoices.slice(0, 3).forEach((inv, k) => {\n  const total = Number(inv.total);\n  if (k === 0) add(total, inv.customer_name, iban(inv.id), inv.ogm);\n  if (k === 1) add(total, String(inv.customer_name).toUpperCase(), iban(inv.id), `factuur ${inv.number}`);\n  if (k === 2) add(Math.round((total - 20) * 100) / 100, inv.customer_name, iban(inv.id), inv.ogm);\n});\nadd(42.5, 'Pieter Claes', 'BE71096123456769', 'terugbetaling lunch');\n\nconst stamp = `${now.getFullYear()}-${p(now.getMonth() + 1)}-${p(now.getDate())} ${p(now.getHours())}${p(now.getMinutes())}${p(now.getSeconds())}`;\nreturn [{ json: { fileName: `KBC export demo ${stamp}.csv`, csv: rows.join('\\r\\n') + '\\r\\n' } }];\n"
+      },
+      "name": "Write the bank file",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ],
+      "id": "lc-write-the-bank-file"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.csv }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/csv; charset=utf-8"
+              },
+              {
+                "name": "Content-Disposition",
+                "value": "=attachment; filename=\"{{ $json.fileName }}\""
+              }
+            ]
+          }
+        }
+      },
+      "name": "Send the file",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        660,
+        300
+      ],
+      "id": "lc-send-the-file"
+    }
+  ],
+  "connections": {
+    "Ask for a demo bank file": {
+      "main": [
+        [
+          {
+            "node": "Load the newest open invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load the newest open invoices": {
+      "main": [
+        [
+          {
+            "node": "Write the bank file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write the bank file": {
+      "main": [
+        [
+          {
+            "node": "Send the file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Brussels"
+  },
+  "pinData": {},
+  "tags": []
+}

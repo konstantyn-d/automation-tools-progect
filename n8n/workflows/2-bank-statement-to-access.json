@@ -1,0 +1,402 @@
+{
+  "id": "LcBankPayments01",
+  "name": "2. Bank statement → payments → access",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Import a bank statement",
+        "formDescription": "Upload the CSV export from KBC. Payments are matched to invoices; customers who paid get their access and a welcome e-mail. Lines imported before are skipped.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Bank export",
+              "fieldType": "file",
+              "acceptFileTypes": ".csv",
+              "multipleFiles": false,
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "path": "bank-statement",
+          "appendAttribution": false
+        }
+      },
+      "name": "Upload a bank statement",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        300
+      ],
+      "id": "lc-upload-a-bank-statement",
+      "webhookId": "loopcasts-bank-statement"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Read the KBC export (CSV with ; and decimal commas) into clean bank lines.\nconst item = $input.first();\nconst key = Object.keys(item.binary ?? {})[0];\nif (!key) throw new Error('No file was uploaded');\nconst fileName = item.binary[key].fileName ?? 'bank-export.csv';\nconst text = (await this.helpers.getBinaryDataBuffer(0, key)).toString('utf8').replace(/^﻿/, '');\nconst lines = text.split(/\\r?\\n/).filter((l) => l.trim());\n\nconst header = lines[0].split(';').map((h) => h.trim().toLowerCase());\nconst col = (name) => header.indexOf(name);\nfor (const name of ['datum', 'bedrag', 'naam tegenpartij', 'vrije mededeling']) {\n  if (col(name) < 0) throw new Error(`This does not look like a KBC export: the column \"${name}\" is missing`);\n}\nconst num = (s) => Number(String(s ?? '').trim().replace(/\\./g, '').replace(',', '.'));\nconst date = (s) => {\n  const [d, m, y] = String(s).trim().split('/');\n  return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;\n};\nconst get = (cells, name) => (col(name) >= 0 ? (cells[col(name)] ?? '').trim() : '');\n\nconst rows = lines.slice(1).map((line, i) => {\n  const cells = line.split(';');\n  return {\n    booked_on: date(get(cells, 'datum')),\n    amount: num(get(cells, 'bedrag')),\n    currency: get(cells, 'munt') || 'EUR',\n    name: get(cells, 'naam tegenpartij'),\n    iban: get(cells, 'rekening tegenpartij').replace(/\\s/g, ''),\n    message: get(cells, 'vrije mededeling'),\n    balance: get(cells, 'saldo') ? num(get(cells, 'saldo')) : null,\n    file: fileName,\n    line: i + 2, // line number in the file: importing the same file twice changes nothing\n  };\n});\nreturn [{ json: { fileName, lineCount: rows.length, rows } }];\n"
+      },
+      "name": "Read the bank file",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "id": "lc-read-the-bank-file"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Keep every bank line. A line that was imported before (same file, same line) is skipped.\nINSERT INTO bank_transactions (booked_on, amount, currency, counterparty_name, counterparty_iban, message,\n                               balance, source_file, source_line)\nSELECT booked_on, amount, currency, name, iban, message, balance, file, line\nFROM jsonb_to_recordset($1::jsonb)\n     AS x(booked_on date, amount numeric, currency text, name text, iban text, message text,\n          balance numeric, file text, line int)\nON CONFLICT (source_file, source_line) DO NOTHING\nRETURNING id, booked_on::text AS booked_on, amount, counterparty_name, message;",
+        "options": {
+          "queryReplacement": "={{ [ JSON.stringify($json.rows) ] }}"
+        }
+      },
+      "name": "Save the bank lines",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        440,
+        300
+      ],
+      "id": "lc-save-the-bank-lines",
+      "credentials": {
+        "postgres": {
+          "id": "LcPostgresDb0001",
+          "name": "LoopCasts database"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, number, customer_name, total, coalesce(paid_amount, 0) AS paid_amount, ogm\nFROM invoices\nWHERE status = 'open' AND kind = 'invoice';",
+        "options": {}
+      },
+      "name": "Load the open invoices",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        660,
+        300
+      ],
+      "id": "lc-load-the-open-invoices",
+      "credentials": {
+        "postgres": {
+          "id": "LcPostgresDb0001",
+          "name": "LoopCasts database"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Match each new incoming payment to an open invoice. The rules, from sure to less sure:\n//   1. structured reference (+++123/4567/89012+++)        -> matched\n//   2. invoice number typed in the message (2026-0285)    -> matched\n//   3. same amount and the same name as on the invoice    -> matched if only one invoice fits\n//   anything else                                          -> a person checks it (with a suggestion when there is one)\nconst lines = $('Save the bank lines').all().map((i) => i.json).filter((l) => l.id);\nconst open = $input.all().map((i) => i.json).filter((i) => i.id);\n\nconst digits = (s) => String(s ?? '').replace(/\\D/g, '');\nconst byOgm = new Map(open.filter((i) => i.ogm).map((i) => [digits(i.ogm), i]));\nconst byNumber = new Map(open.map((i) => [i.number, i]));\nconst words = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()\n  .replace(/[^a-z]+/g, ' ').split(' ').filter((w) => w.length > 1);\nconst sameName = (a, b) => {\n  const wa = new Set(words(a));\n  const wb = words(b);\n  const common = wb.filter((w) => wa.has(w)).length;\n  return common >= 2 || (common >= 1 && Math.min(wa.size, wb.length) === 1);\n};\nconst left = (i) => Math.round((Number(i.total) - Number(i.paid_amount)) * 100) / 100;\n\nconst matches = [];\nlet ignored = 0;\nfor (const line of lines) {\n  const amount = Number(line.amount);\n  if (!(amount > 0)) { ignored += 1; continue; } // money going out is not a customer payment\n\n  const msg = String(line.message ?? '');\n  const ogm = msg.match(/\\+{3}\\s*(\\d{3})\\s*\\/?\\s*(\\d{4})\\s*\\/?\\s*(\\d{5})\\s*\\+{3}/) || msg.match(/(?<!\\d)(\\d{12})(?!\\d)/);\n  const ogmInvoice = ogm && byOgm.get(digits(ogm.slice(1).join('')));\n  if (ogmInvoice) {\n    matches.push({ tx_id: line.id, invoice_id: ogmInvoice.id, result: 'matched', method: 'ogm', confidence: 1, invoice: ogmInvoice.number, reason: null });\n    continue;\n  }\n\n  const nr = msg.match(/(20\\d{2})\\s*[-\\/ ]?\\s*(\\d{4})(?!\\d)/);\n  const nrInvoice = nr && byNumber.get(`${nr[1]}-${nr[2]}`);\n  if (nrInvoice) {\n    matches.push({ tx_id: line.id, invoice_id: nrInvoice.id, result: 'matched', method: 'invoice_number', confidence: 0.9, invoice: nrInvoice.number, reason: null });\n    continue;\n  }\n\n  const sameAmount = open.filter((i) => left(i) === amount);\n  const named = sameAmount.filter((i) => sameName(i.customer_name, line.counterparty_name));\n  if (named.length === 1) {\n    matches.push({ tx_id: line.id, invoice_id: named[0].id, result: 'matched', method: 'amount_name', confidence: 0.75, invoice: named[0].number, reason: null });\n    continue;\n  }\n\n  const guess = named[0] ?? (sameAmount.length === 1 ? sameAmount[0] : null);\n  matches.push({\n    tx_id: line.id,\n    invoice_id: guess ? guess.id : null,\n    result: 'check',\n    method: guess ? 'suggestion' : null,\n    confidence: guess ? 0.4 : 0,\n    invoice: guess ? guess.number : null,\n    reason: guess\n      ? `No reference. Same amount as invoice ${guess.number}; please confirm.`\n      : `No invoice found for ${amount.toFixed(2)} from ${line.counterparty_name || 'unknown'} (\"${msg}\")`,\n  });\n}\n\nreturn [{ json: { matches, newLines: lines.length, ignored } }];\n"
+      },
+      "name": "Match each payment",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        300
+      ],
+      "id": "lc-match-each-payment"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Matched payments: invoice paid, account, access, order paid (all in register_payment, one transaction each).\n-- Lines a person has to check get a flag and the reason, so they show up in the admin panel.\nWITH m AS (\n  SELECT * FROM jsonb_to_recordset($1::jsonb)\n         AS x(tx_id int, invoice_id int, result text, method text, confidence numeric, reason text)\n), flagged AS (\n  UPDATE bank_transactions b\n     SET needs_review = true, suggested_invoice_id = m.invoice_id, match_method = m.method, review_reason = m.reason\n    FROM m\n   WHERE b.id = m.tx_id AND m.result = 'check'\n  RETURNING b.id\n)\nSELECT r.*, (SELECT count(*) FROM flagged) AS flagged\nFROM m\nCROSS JOIN LATERAL register_payment(m.tx_id, m.invoice_id, m.method, m.confidence) AS r\nWHERE m.result = 'matched';",
+        "options": {
+          "queryReplacement": "={{ [ JSON.stringify($json.matches) ] }}"
+        }
+      },
+      "name": "Register the payments",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1100,
+        300
+      ],
+      "id": "lc-register-the-payments",
+      "credentials": {
+        "postgres": {
+          "id": "LcPostgresDb0001",
+          "name": "LoopCasts database"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Access given?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1320,
+        160
+      ],
+      "id": "lc-access-given"
+    },
+    {
+      "parameters": {
+        "fromEmail": "LoopCasts <hello@loopcasts.example>",
+        "toEmail": "={{ $json.email }}",
+        "subject": "Your LoopCasts access is ready",
+        "emailFormat": "html",
+        "html": "={{ (() => {\n  const r = $json;\n  const product = { monthly: 'all courses (monthly subscription)', yearly: 'all courses (yearly subscription)', team: 'all courses for your team (5 seats)', single: `the course \"${r.course_title}\"` }[r.product] ?? 'LoopCasts';\n  const until = r.access_until ? `until ${new Date(r.access_until).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}` : 'for good';\n  const login = r.new_account\n    ? `<p><a href=\"http://localhost:5173/login?email=${encodeURIComponent(r.email)}\" style=\"background:#222;color:#fff;padding:10px 16px;border-radius:6px;text-decoration:none\">Set your password</a></p>`\n    : `<p>Sign in with your usual password at <a href=\"http://localhost:5173/login\">loopcasts.be</a>.</p>`;\n  return `<div style=\"font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#222\">\n  <p style=\"font-size:13px;letter-spacing:.08em;color:#888\">LOOPCASTS</p>\n  <h1 style=\"font-size:22px\">Your payment arrived, welcome in</h1>\n  <p>Hi ${String(r.name).split(' ')[0]},</p>\n  <p>We received your payment for invoice ${r.invoice_number}. You now have access to ${product}, ${until}.</p>\n  ${login}\n  <p>Questions? Just answer this e-mail.</p>\n</div>`;\n})() }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Send the welcome e-mail",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1540,
+        160
+      ],
+      "id": "lc-send-the-welcome-e-mail",
+      "credentials": {
+        "smtp": {
+          "id": "LcMailpitSmtp001",
+          "name": "LoopCasts mail (Mailpit)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// What happened, for the person who uploaded the file and for the team.\nconst read = $('Read the bank file').first().json;\nconst m = $('Match each payment').first().json;\nconst done = $('Register the payments').all().map((i) => i.json).filter((r) => r.invoice_number);\n\nconst count = (fn) => done.filter(fn).length;\nconst checks = m.matches.filter((x) => x.result === 'check');\nconst partly = done.filter((r) => r.result === 'partly_paid');\nconst lines = [\n  `File: ${read.fileName} (${read.lineCount} lines)`,\n  `Imported before, skipped: ${read.lineCount - m.newLines}`,\n  `Outgoing payments, ignored: ${m.ignored}`,\n  `Invoices paid, access given: ${count((r) => r.result === 'paid' || r.result === 'paid_too_much')} (new accounts: ${count((r) => r.new_account)})`,\n  `Paid only partly: ${partly.length}`,\n  `For a person to check: ${checks.length}`,\n];\nconst forTeam = [\n  ...partly.map((r) => `Invoice ${r.invoice_number}: paid ${r.paid} of ${r.total}`),\n  ...checks.map((c) => c.reason),\n];\nreturn [{ json: { summary: lines.join('\\n'), needsPerson: forTeam.length > 0, forTeam } }];\n"
+      },
+      "name": "Sum up",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        420
+      ],
+      "id": "lc-sum-up",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "text",
+        "completionTitle": "Bank statement imported",
+        "completionMessage": "={{ $json.summary }}",
+        "options": {}
+      },
+      "name": "Show the result",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1540,
+        420
+      ],
+      "id": "lc-show-the-result"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.needsPerson }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Anything for a person?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1540,
+        620
+      ],
+      "id": "lc-anything-for-a-person"
+    },
+    {
+      "parameters": {
+        "fromEmail": "LoopCasts automation <automation@loopcasts.example>",
+        "toEmail": "team@loopcasts.example",
+        "subject": "=Bank import: {{ $json.forTeam.length }} payments need a person",
+        "emailFormat": "html",
+        "html": "={{ '<p>These payments from the bank import need a person (Admin → Payments):</p><ul>' + $json.forTeam.map(t => '<li>' + t + '</li>').join('') + '</ul>' }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Tell the team",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1760,
+        620
+      ],
+      "id": "lc-tell-the-team",
+      "credentials": {
+        "smtp": {
+          "id": "LcMailpitSmtp001",
+          "name": "LoopCasts mail (Mailpit)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Upload a bank statement": {
+      "main": [
+        [
+          {
+            "node": "Read the bank file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the bank file": {
+      "main": [
+        [
+          {
+            "node": "Save the bank lines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save the bank lines": {
+      "main": [
+        [
+          {
+            "node": "Load the open invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load the open invoices": {
+      "main": [
+        [
+          {
+            "node": "Match each payment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match each payment": {
+      "main": [
+        [
+          {
+            "node": "Register the payments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register the payments": {
+      "main": [
+        [
+          {
+            "node": "Access given?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sum up",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Access given?": {
+      "main": [
+        [
+          {
+            "node": "Send the welcome e-mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sum up": {
+      "main": [
+        [
+          {
+            "node": "Show the result",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Anything for a person?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anything for a person?": {
+      "main": [
+        [
+          {
+            "node": "Tell the team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "LcErrorHandler01",
+    "timezone": "Europe/Brussels",
+    "binaryMode": "separate"
+  },
+  "pinData": {},
+  "tags": []
+}

@@ -1,0 +1,486 @@
+{
+  "id": "LcOrderInvoice01",
+  "name": "1. New order → invoice → e-mail",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "order",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "name": "New order from the site",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        300
+      ],
+      "id": "lc-new-order-from-the-site",
+      "webhookId": "loopcasts-new-order"
+    },
+    {
+      "parameters": {
+        "jsCode": "// The site already checks the form, but the server checks again: never trust only the browser.\nconst order = $json.body ?? {};\nconst c = order.customer ?? {};\nconst EU = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];\nconst PRODUCTS = ['monthly', 'yearly', 'team', 'single'];\nconst text = (v) => String(v ?? '').trim();\n\nconst errors = [];\nconst email = text(c.email).toLowerCase();\nif (!/^[^@\\s]+@[^@\\s]+\\.[a-z]{2,}$/i.test(email)) errors.push('email');\nif (!text(c.firstName) || !text(c.lastName)) errors.push('name');\nif (!PRODUCTS.includes(order.product)) errors.push('product');\nif (order.product === 'single' && !text(order.course)) errors.push('course');\n\nconst isCompany = c.type === 'company';\nif (isCompany && !text(c.company)) errors.push('company');\nconst country = /^[A-Z]{2}$/.test(text(c.country).toUpperCase()) ? text(c.country).toUpperCase() : null;\nconst vatNumber = isCompany ? text(c.vatNumber).replace(/[\\s.\\-]/g, '').toUpperCase() : '';\nconst vat = vatNumber.match(/^([A-Z]{2})([0-9A-Z]{2,13})$/);\nconst address = [text(c.street), [text(c.postalCode), text(c.city)].filter(Boolean).join(' ')].filter(Boolean).join(', ');\n\nreturn [{\n  json: {\n    valid: errors.length === 0,\n    errors,\n    customer: {\n      email,\n      name: `${text(c.firstName)} ${text(c.lastName)}`,\n      firstName: text(c.firstName),\n      company: isCompany ? text(c.company) : null,\n      isCompany,\n      vatNumber: vat ? vatNumber : null,\n      country,\n      inEu: EU.includes(country),\n      address: address || null,\n    },\n    product: order.product,\n    course: order.product === 'single' ? text(order.course) : null,\n    discountCode: text(order.discountCode) || null,\n    poNumber: text(order.poNumber) || null,\n    // Every EU company with a VAT number is checked in VIES (integration 1).\n    vies: {\n      needed: Boolean(isCompany && vat && EU.includes(country)),\n      countryCode: vat ? (vat[1] === 'GR' ? 'EL' : vat[1]) : null,\n      vatNumber: vat ? vat[2] : null,\n    },\n    raw: order,\n  },\n}];\n"
+      },
+      "name": "Check the order",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "id": "lc-check-the-order"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "valid",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Is the order complete?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        300
+      ],
+      "id": "lc-is-the-order-complete"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, errors: $json.errors } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "name": "Answer: order incomplete",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        660,
+        520
+      ],
+      "id": "lc-answer:-order-incomplete"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "vies",
+              "leftValue": "={{ $json.vies.needed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "EU company with a VAT number?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        300
+      ],
+      "id": "lc-eu-company-with-a-vat-number"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ec.europa.eu/taxation_customs/vies/rest-api/check-vat-number",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ countryCode: $json.vies.countryCode, vatNumber: $json.vies.vatNumber }) }}",
+        "options": {
+          "timeout": 8000
+        }
+      },
+      "name": "Check the VAT number in VIES",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        200
+      ],
+      "id": "lc-check-the-vat-number-in-vies",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500,
+      "onError": "continueRegularOutput",
+      "notes": "Integration 1: the EU VIES service (free, no key). If it does not answer, the order still goes through and a person checks the number."
+    },
+    {
+      "parameters": {
+        "jsCode": "// LoopCasts VAT rules (handbook chapter 1), the same rules as web/src/lib/vat.js.\n//   Belgium: 21%   ·   EU private person: 21%   ·   EU company with a VAT number that VIES says is valid: 0%, reverse charge\n//   outside the EU: 0%\nconst o = $('Check the order').first().json;\nconst c = o.customer;\n\nlet vies = { status: 'not_needed' };\nif (o.vies.needed) {\n  const r = $input.first().json;\n  const clean = (s) => (s && s !== '---' ? String(s).trim() : null);\n  if (r.error || r.actionSucceed === false || r.errorWrappers || typeof r.valid !== 'boolean') {\n    vies = { status: 'unavailable' };\n  } else {\n    vies = { status: r.valid ? 'valid' : 'invalid', name: clean(r.name), checkedAt: r.requestDate ?? null };\n  }\n}\n\nlet rule;\nlet rate;\nif (c.country === 'BE') { rule = 'BE_21'; rate = 0.21; }\nelse if (c.inEu && c.isCompany && vies.status === 'valid') { rule = 'EU_REVERSE_CHARGE'; rate = 0; }\nelse if (c.inEu) { rule = c.isCompany ? 'EU_COMPANY_21' : 'EU_PRIVATE_21'; rate = 0.21; }\nelse { rule = 'NON_EU_0'; rate = 0; }\n\n// Nothing is lost when VIES has a problem: the order goes through with 21% VAT and a person looks at it.\nlet reviewReason = null;\nif (vies.status === 'unavailable') reviewReason = 'VIES did not answer. Check the VAT number by hand; the invoice was made with 21% VAT.';\nif (vies.status === 'invalid') reviewReason = 'VIES says the VAT number is not valid; the invoice was made with 21% VAT.';\n\nconst vatValid = vies.status === 'valid' ? true : vies.status === 'invalid' ? false : null;\n\nreturn [{\n  json: {\n    vat: { rule, rate },\n    vies,\n    needsReview: reviewReason !== null,\n    reviewReason,\n    // Values for the SQL query in \"Save customer and order\" ($1 ... $15)\n    params: [\n      c.email, c.name, c.company, c.vatNumber, vatValid, c.country, c.address,\n      o.product, o.course, o.discountCode, o.poNumber, rule, reviewReason !== null, reviewReason, o.raw,\n    ],\n  },\n}];\n"
+      },
+      "name": "Apply the VAT rules",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        300
+      ],
+      "id": "lc-apply-the-vat-rules"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- One customer per e-mail address (an existing customer is updated), then the order.\n-- The price comes from the products table, never from the browser.\nWITH customer AS (\n  INSERT INTO customers (email, name, company, vat_number, vat_valid, vat_checked_at, country, address, source)\n  VALUES ($1, $2, $3, $4, $5::boolean, CASE WHEN $5::boolean IS NULL THEN NULL ELSE now() END, $6, $7, 'web')\n  ON CONFLICT (email) DO UPDATE SET\n    name           = EXCLUDED.name,\n    company        = coalesce(EXCLUDED.company, customers.company),\n    vat_number     = coalesce(EXCLUDED.vat_number, customers.vat_number),\n    vat_valid      = coalesce(EXCLUDED.vat_valid, customers.vat_valid),\n    vat_checked_at = coalesce(EXCLUDED.vat_checked_at, customers.vat_checked_at),\n    country        = coalesce(EXCLUDED.country, customers.country),\n    address        = coalesce(EXCLUDED.address, customers.address)\n  RETURNING id\n)\nINSERT INTO orders (customer_id, ordered_on, product_code, course_id, course_slug, seats, price_excl,\n                    promo_code, po_number, vat_rule, needs_review, review_reason, payload, source)\nSELECT customer.id, current_date, p.code, co.id, $9, p.seats,\n       CASE WHEN p.code = 'single' THEN coalesce(co.single_price, p.price_excl) ELSE p.price_excl END,\n       $10, $11, $12, $13::boolean, $14, $15::jsonb, 'web'\nFROM customer\nJOIN products p ON p.code = $8 AND p.active\nLEFT JOIN courses co ON co.slug = $9\nRETURNING id AS order_id, product_code, price_excl,\n          CASE WHEN product_code = 'single' THEN (SELECT title FROM courses WHERE slug = $9) END AS course_title;",
+        "options": {
+          "queryReplacement": "={{ $json.params }}"
+        }
+      },
+      "name": "Save customer and order",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1320,
+        300
+      ],
+      "id": "lc-save-customer-and-order",
+      "credentials": {
+        "postgres": {
+          "id": "LcPostgresDb0001",
+          "name": "LoopCasts database"
+        }
+      },
+      "notes": "Integration 2: the LoopCasts database (PostgreSQL)."
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- The database hands out the number inside one transaction: no gaps, no duplicates.\n-- Calling it again for the same order returns the same invoice.\nSELECT id, number, customer_name, amount_excl, vat_rule, vat_amount, total, ogm, status,\n       issued_on::text AS issued_on, due_on::text AS due_on\nFROM create_invoice($1, $2, $3);",
+        "options": {
+          "queryReplacement": "={{ [ $json.order_id, $('Apply the VAT rules').first().json.vat.rule, $('Apply the VAT rules').first().json.vat.rate ] }}"
+        }
+      },
+      "name": "Create the invoice",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1540,
+        300
+      ],
+      "id": "lc-create-the-invoice",
+      "credentials": {
+        "postgres": {
+          "id": "LcPostgresDb0001",
+          "name": "LoopCasts database"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// The invoice e-mail. Plain HTML that every mail program shows the same way.\nconst inv = $json;\nconst o = $('Check the order').first().json;\nconst saved = $('Save customer and order').first().json;\nconst rules = $('Apply the VAT rules').first().json;\n\nconst euro = (n) => new Intl.NumberFormat('nl-BE', { style: 'currency', currency: 'EUR' }).format(Number(n));\nconst date = (d) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });\nconst PRODUCT = { monthly: 'Monthly subscription', yearly: 'Yearly subscription', team: 'Team licence (5 seats)', single: 'Single course' };\nconst product = saved.product_code === 'single' && saved.course_title\n  ? `Single course: ${saved.course_title}` : PRODUCT[saved.product_code];\nconst VAT_LINE = {\n  BE_21: 'VAT 21%', EU_PRIVATE_21: 'VAT 21%', EU_COMPANY_21: 'VAT 21%',\n  EU_REVERSE_CHARGE: 'VAT 0%, reverse charged (art. 196 VAT Directive)', NON_EU_0: 'VAT 0%, outside the EU',\n};\nconst row = (k, v, bold) => `<tr><td style=\"padding:6px 0;color:#6b6b6b\">${k}</td><td style=\"padding:6px 0;text-align:right;${bold ? 'font-weight:600' : ''}\">${v}</td></tr>`;\n\nconst html = `<div style=\"font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#222\">\n  <p style=\"font-size:13px;letter-spacing:.08em;color:#888\">LOOPCASTS BV · GHENT</p>\n  <h1 style=\"font-size:22px;margin:0 0 4px\">Invoice ${inv.number}</h1>\n  <p style=\"margin:0 0 20px;color:#555\">Dated ${date(inv.issued_on)} · pay before ${date(inv.due_on)}</p>\n  <p>Hi ${o.customer.firstName},</p>\n  <p>Thank you for your order. Here is your invoice. As soon as your payment arrives, your access starts by itself\n  and you get your login by e-mail.</p>\n  <table style=\"width:100%;border-collapse:collapse;margin:20px 0;border-top:1px solid #ddd;border-bottom:1px solid #ddd\">\n    ${row('Customer', [inv.customer_name, o.customer.vatNumber].filter(Boolean).join(' · '))}\n    ${row(product, euro(inv.amount_excl))}\n    ${row(VAT_LINE[rules.vat.rule] ?? 'VAT', euro(inv.vat_amount))}\n    ${row('Total to pay', euro(inv.total), true)}\n  </table>\n  <div style=\"background:#f4f1ea;border-radius:8px;padding:14px 16px\">\n    <p style=\"margin:0 0 6px\"><b>Pay by bank transfer</b></p>\n    <p style=\"margin:0\">IBAN BE68 5390 0754 7034 · BIC KREDBEBB · LoopCasts BV</p>\n    <p style=\"margin:6px 0 0\">Structured reference: <b style=\"font-family:monospace;font-size:15px\">${inv.ogm}</b></p>\n    <p style=\"margin:6px 0 0;font-size:13px;color:#666\">Please use this reference: it lets us match your payment straight away.</p>\n  </div>\n  ${o.poNumber ? `<p style=\"font-size:13px;color:#666\">Your PO number: ${o.poNumber}</p>` : ''}\n  <p style=\"font-size:12px;color:#999;margin-top:24px\">LoopCasts BV · Ghent, Belgium · VAT BE0712 345 678</p>\n</div>`;\n\nreturn [{ json: { to: o.customer.email, subject: `Invoice ${inv.number} from LoopCasts`, html } }];\n"
+      },
+      "name": "Write the invoice e-mail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        300
+      ],
+      "id": "lc-write-the-invoice-e-mail"
+    },
+    {
+      "parameters": {
+        "fromEmail": "LoopCasts <billing@loopcasts.example>",
+        "toEmail": "={{ $json.to }}",
+        "subject": "={{ $json.subject }}",
+        "emailFormat": "html",
+        "html": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Send the invoice",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1980,
+        300
+      ],
+      "id": "lc-send-the-invoice",
+      "credentials": {
+        "smtp": {
+          "id": "LcMailpitSmtp001",
+          "name": "LoopCasts mail (Mailpit)"
+        }
+      },
+      "notes": "Integration 3: e-mail (SMTP). Locally Mailpit catches every message, nothing leaves the laptop."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "review",
+              "leftValue": "={{ $('Apply the VAT rules').first().json.needsReview }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Needs a person?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2200,
+        300
+      ],
+      "id": "lc-needs-a-person"
+    },
+    {
+      "parameters": {
+        "fromEmail": "LoopCasts automation <automation@loopcasts.example>",
+        "toEmail": "team@loopcasts.example",
+        "subject": "=Order {{ $('Save customer and order').first().json.order_id }} needs a person",
+        "emailFormat": "html",
+        "html": "={{ `<p>Order ${$('Save customer and order').first().json.order_id} needs a person.</p>\n<p><b>Why:</b> ${$('Apply the VAT rules').first().json.reviewReason}</p>\n<p>Customer: ${$('Check the order').first().json.customer.name} (${$('Check the order').first().json.customer.email}),\nVAT number ${$('Check the order').first().json.customer.vatNumber}</p>\n<p>Invoice ${$('Create the invoice').first().json.number} was sent with 21% VAT. If the number turns out valid, make a credit note.</p>` }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Tell the team",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2420,
+        200
+      ],
+      "id": "lc-tell-the-team",
+      "credentials": {
+        "smtp": {
+          "id": "LcMailpitSmtp001",
+          "name": "LoopCasts mail (Mailpit)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, orderId: $('Save customer and order').first().json.order_id, invoice: { number: $('Create the invoice').first().json.number, total: Number($('Create the invoice').first().json.total), vat: Number($('Create the invoice').first().json.vat_amount), reference: $('Create the invoice').first().json.ogm, dueOn: $('Create the invoice').first().json.due_on }, needsReview: $('Apply the VAT rules').first().json.needsReview } }}",
+        "options": {}
+      },
+      "name": "Answer: order received",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2640,
+        300
+      ],
+      "id": "lc-answer:-order-received"
+    }
+  ],
+  "connections": {
+    "New order from the site": {
+      "main": [
+        [
+          {
+            "node": "Check the order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check the order": {
+      "main": [
+        [
+          {
+            "node": "Is the order complete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is the order complete?": {
+      "main": [
+        [
+          {
+            "node": "EU company with a VAT number?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Answer: order incomplete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EU company with a VAT number?": {
+      "main": [
+        [
+          {
+            "node": "Check the VAT number in VIES",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apply the VAT rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check the VAT number in VIES": {
+      "main": [
+        [
+          {
+            "node": "Apply the VAT rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply the VAT rules": {
+      "main": [
+        [
+          {
+            "node": "Save customer and order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save customer and order": {
+      "main": [
+        [
+          {
+            "node": "Create the invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create the invoice": {
+      "main": [
+        [
+          {
+            "node": "Write the invoice e-mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write the invoice e-mail": {
+      "main": [
+        [
+          {
+            "node": "Send the invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send the invoice": {
+      "main": [
+        [
+          {
+            "node": "Needs a person?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs a person?": {
+      "main": [
+        [
+          {
+            "node": "Tell the team",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Answer: order received",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tell the team": {
+      "main": [
+        [
+          {
+            "node": "Answer: order received",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "LcErrorHandler01",
+    "timezone": "Europe/Brussels",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": true
+  },
+  "pinData": {},
+  "tags": []
+}

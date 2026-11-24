@@ -134,13 +134,18 @@ export default function Order() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
-        if (!response.ok) throw new Error(`The server answered ${response.status}`)
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 900))
+        const answer = await response.json().catch(() => null)
+        if (!response.ok || !answer?.ok) {
+          throw new Error(answer?.errors ? `Please check: ${answer.errors.join(', ')}` : `The server answered ${response.status}`)
+        }
+        // n8n answers with the invoice it made: number, total and the structured reference
+        setState({ status: 'done', payload, demo: false, totals: vat, invoice: answer.invoice })
+        return
       }
-      // demo mode: the order goes into the admin panel's sample data, like n8n will do later
-      const placed = WEBHOOK_URL ? null : placeOrder(payload, vat)
-      setState({ status: 'done', payload, demo: !WEBHOOK_URL, totals: vat, invoice: placed?.invoice })
+      await new Promise((resolve) => setTimeout(resolve, 900))
+      // demo mode: the order goes into the admin panel's sample data, like n8n does for real
+      const placed = placeOrder(payload, vat)
+      setState({ status: 'done', payload, demo: true, totals: vat, invoice: placed?.invoice })
     } catch (error) {
       // Nothing fails silently: the customer is told, and can try again without retyping.
       setState({ status: 'failed', message: error.message })
@@ -204,7 +209,7 @@ export default function Order() {
           </h1>
           <ol className="next">
             <li><b>01</b>We check your details and create invoice and payment reference.</li>
-            <li><b>02</b>You get the invoice as a PDF at {state.payload.customer.email}.</li>
+            <li><b>02</b>You get the invoice by e-mail at {state.payload.customer.email}.</li>
             <li><b>03</b>You pay by bank transfer and mention the reference.</li>
             <li><b>04</b>Your payment is matched and your login arrives by itself.</li>
           </ol>
