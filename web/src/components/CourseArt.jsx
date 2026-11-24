@@ -1,4 +1,5 @@
 import { seeded } from '../lib/random.js'
+import { COVERS } from '../data/covers.js'
 import { Sprite } from './pixel.jsx'
 
 // One small pixel scene per course: a coloured sky, a few specks, a ground strip and a 16 px sprite.
@@ -282,7 +283,15 @@ const TONES = {
   sand: { sky: ['#c9a66b', '#dcbf8e', '#efdcb8'], ground: '#9a7440', speck: '#fffaf0' },
 }
 
-export default function CourseArt({ name, tone }) {
+export default function CourseArt({ name, tone, slug }) {
+  const photo = slug && COVERS[slug]
+  if (photo) {
+    return (
+      <span className="course-art course-art--photo">
+        <img src={photo} alt="" loading="lazy" decoding="async" />
+      </span>
+    )
+  }
   const sprite = SPRITES[name] || SPRITES.nodes
   const art = TONES[tone] || TONES.peach
   const rand = seeded(name.length * 97 + name.charCodeAt(0) + (tone ? tone.charCodeAt(0) * 13 : 0))

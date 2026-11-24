@@ -154,3 +154,7 @@ no bank or payment provider is connected.
 ## Credits
 
 Fonts: Inter, IBM Plex Mono and Departure Mono, all under the SIL Open Font License.
+
+Course cover photos (`src/assets/covers/`, one file per course slug) come from
+[Unsplash](https://unsplash.com) and are used under the [Unsplash License](https://unsplash.com/license).
+The landing page scene (park, tree, laptop) is drawn in code in `src/lib/parkScene.js`.

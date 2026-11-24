@@ -8,7 +8,7 @@ export default function CourseTile({ course, query = '', lesson = null, isNew = 
   return (
     <Link to={`/courses/${course.slug}`} className="tile" style={{ '--i': Math.min(index, 11) }}>
       <div className="tile__art">
-        <CourseArt name={course.art} tone={course.tone} />
+        <CourseArt name={course.art} tone={course.tone} slug={course.slug} />
         {isNew && <i className="tile__badge">New</i>}
       </div>
       <div className="tile__body">

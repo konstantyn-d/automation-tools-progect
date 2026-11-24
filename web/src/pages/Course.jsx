@@ -75,7 +75,7 @@ export default function Course() {
 
         <div className="course__cover cover-mount">
           <div className="cover cover--static">
-            <CourseArt name={course.art} tone={course.tone} />
+            <CourseArt name={course.art} tone={course.tone} slug={course.slug} />
           </div>
         </div>
       </section>

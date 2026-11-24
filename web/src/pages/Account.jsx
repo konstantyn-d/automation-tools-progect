@@ -21,7 +21,7 @@ function CourseRow({ course, watched }) {
   return (
     <li className="mycourse">
       <Link to={`/courses/${course.slug}`} className="mycourse__art" aria-label={course.title}>
-        <CourseArt name={course.art} tone={course.tone} />
+        <CourseArt name={course.art} tone={course.tone} slug={course.slug} />
       </Link>
       <div className="mycourse__body">
         <Link to={`/courses/${course.slug}`} className="mycourse__title">{course.title}</Link>
